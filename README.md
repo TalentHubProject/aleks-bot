@@ -115,7 +115,7 @@ You can see every features of the bot by checking all the files inside the `Remo
 - [x] Implement the experience system, to reward users for their activity, with the creatures api.
 - [x] Implement the personal vocal system, every user can create a personal vocal channel.
 - [x] Implement the welcomer system, to welcome new users.
-- [ ] Implement a command to modify the guild welcomer message with placeholder. "Welcome {user} to {guild}!"
+- [x] Implement a command to modify the guild welcomer message with placeholder. "Welcome {user} to {guild}!"
 - [ ] Optimize experience feature's queries to the database, with a cache system.
 - [ ] Batch the experience feature's queries to the database, to prevent spamming the database.
 - [ ] Maybe use RabbitMQ to batch the experience feature's queries to the database.
