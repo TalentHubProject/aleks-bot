@@ -126,6 +126,7 @@ You can see every features of the bot by checking all the files inside the `Remo
 - [ ] Add a command to check the bot's latency.
 - [ ] Implement a birthday system, to allow users to set their birthday and to be notified on their birthday. (Create role, make an API to get the birthdays, etc.)
 - [ ] Automatic sending embed message to a list of channels (like to announce animations, informational messages, quizz, minigame, etc.) 
+- [ ] (Advertisment guard) prevent from deletion if instigator author is belonging to a special role || is = to the current guild invite url || whitelist
 
 Eventually, I would like to create a website to manage the bot, with a dashboard, and a panel to manage the bot's settings.
 
