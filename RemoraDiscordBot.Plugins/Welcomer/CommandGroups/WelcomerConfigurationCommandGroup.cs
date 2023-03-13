@@ -8,6 +8,7 @@ using Remora.Commands.Attributes;
 using Remora.Commands.Groups;
 using Remora.Discord.API.Abstractions.Objects;
 using Remora.Discord.Commands.Attributes;
+using Remora.Discord.Commands.Conditions;
 using Remora.Discord.Commands.Contexts;
 using Remora.Discord.Commands.Extensions;
 using Remora.Discord.Commands.Feedback.Messages;
@@ -22,6 +23,7 @@ namespace RemoraDiscordBot.Plugins.Welcomer.CommandGroups;
 
 [Group("welcomer")]
 [Description("Welcomer commands")]
+[RequireDiscordPermission(DiscordPermission.Administrator)]
 public class WelcomerConfigurationCommandGroup
     : CommandGroup
 {

@@ -7,6 +7,7 @@ using MediatR;
 using Remora.Commands.Attributes;
 using Remora.Discord.API.Abstractions.Objects;
 using Remora.Discord.API.Abstractions.Rest;
+using Remora.Discord.Commands.Conditions;
 using Remora.Discord.Commands.Contexts;
 using Remora.Discord.Commands.Extensions;
 using Remora.Discord.Commands.Feedback.Services;
@@ -18,6 +19,7 @@ namespace RemoraDiscordBot.Plugins.AutoRoles.CommandGroups;
 
 [Group("reaction")]
 [Description("Commands to manage reaction roles.")]
+[RequireDiscordPermission(DiscordPermission.Administrator)]
 public class AutoRoleReactionCommandGroup
     : AutoRoleCommandGroup
 {

@@ -6,8 +6,10 @@ using System.ComponentModel;
 using MediatR;
 using Remora.Commands.Attributes;
 using Remora.Commands.Groups;
+using Remora.Discord.API.Abstractions.Objects;
 using Remora.Discord.API.Abstractions.Rest;
 using Remora.Discord.Commands.Attributes;
+using Remora.Discord.Commands.Conditions;
 using Remora.Discord.Commands.Contexts;
 using Remora.Discord.Commands.Extensions;
 using Remora.Discord.Commands.Feedback.Services;
@@ -19,6 +21,7 @@ namespace RemoraDiscordBot.Plugins.PersonalVocal.CommandGroups;
 
 [Group("personal-vocal")]
 [Description("Personal Vocal Commands")]
+[RequireDiscordPermission(DiscordPermission.Administrator)]
 public class SetUniqueVocalChannelPerGuildCommandGroup
     : CommandGroup
 {
