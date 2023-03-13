@@ -16,6 +16,7 @@ public static class Setup
             .AddCommandTree()
             .WithCommandGroup<CreditCommandGroup>()
             .WithCommandGroup<DiagnosticCommands>()
+            .WithCommandGroup<InformationalMessageCreatorCommandGroup>()
             .Finish()
             ;
 
