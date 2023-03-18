@@ -5,6 +5,7 @@
 using Microsoft.EntityFrameworkCore;
 using RemoraDiscordBot.Data.Domain.AutoRoles;
 using RemoraDiscordBot.Data.Domain.Experience;
+using RemoraDiscordBot.Data.Domain.Permission;
 using RemoraDiscordBot.Data.Domain.PersonalVocal;
 using RemoraDiscordBot.Data.Domain.Welcomer;
 
@@ -28,12 +29,15 @@ public class RemoraDiscordBotDbContext
     public DbSet<AutoRoleChannel> AutoRoleChannels { get; set; } = null!;
     public DbSet<AutoRoleReaction> AutoRoleReactions { get; set; } = null!;
     public DbSet<PersonalVocal> PersonalVocals { get; set; } = null!;
+    public DbSet<Permission> Permissions { get; set; } = null!;
+    public DbSet<PermissionUser> PermissionUsers { get; set; } = null!;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         var userGuildXp = modelBuilder.Entity<UserGuildXp>();
         var autoRole = modelBuilder.Entity<AutoRoleChannel>();
         var personalVocal = modelBuilder.Entity<PersonalVocal>();
+        var permissionUser = modelBuilder.Entity<PermissionUser>();
 
         userGuildXp
             .HasKey(x => new {x.UserId, x.GuildId});
@@ -59,5 +63,12 @@ public class RemoraDiscordBotDbContext
 
         personalVocal
             .HasKey(x => x.GuildId);
+
+        modelBuilder.Entity<Permission>().HasKey(x => new {x.Id, x.CategoryId});
+
+        permissionUser
+            .HasMany(x => x.Permissions)
+            .WithMany(x => x.PermissionUsers)
+            ;
     }
 }
