@@ -41,9 +41,9 @@ namespace RemoraDiscordBot.Data.Migrations
                     table.PrimaryKey("PK_PermissionUsers", x => x.Id);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
-                  
+
             migrationBuilder.CreateTable(
-                name: "PermissionPermissionUser",
+                name: "PermissionDtoPermissionUser",
                 columns: table => new
                 {
                     PermissionUsersId = table.Column<int>(type: "int", nullable: false),
@@ -52,15 +52,15 @@ namespace RemoraDiscordBot.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PermissionPermissionUser", x => new { x.PermissionUsersId, x.PermissionsId, x.PermissionsCategoryId });
+                    table.PrimaryKey("PK_PermissionDtoPermissionUser", x => new { x.PermissionUsersId, x.PermissionsId, x.PermissionsCategoryId });
                     table.ForeignKey(
-                        name: "FK_PermissionPermissionUser_PermissionUsers_PermissionUsersId",
+                        name: "FK_PermissionDtoPermissionUser_PermissionUsers_PermissionUsersId",
                         column: x => x.PermissionUsersId,
                         principalTable: "PermissionUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_PermissionPermissionUser_Permissions_PermissionsId_Permissio~",
+                        name: "FK_PermissionDtoPermissionUser_Permissions_PermissionsId_Permis~",
                         columns: x => new { x.PermissionsId, x.PermissionsCategoryId },
                         principalTable: "Permissions",
                         principalColumns: new[] { "Id", "CategoryId" },
@@ -69,8 +69,8 @@ namespace RemoraDiscordBot.Data.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateIndex(
-                name: "IX_PermissionPermissionUser_PermissionsId_PermissionsCategoryId",
-                table: "PermissionPermissionUser",
+                name: "IX_PermissionDtoPermissionUser_PermissionsId_PermissionsCategor~",
+                table: "PermissionDtoPermissionUser",
                 columns: new[] { "PermissionsId", "PermissionsCategoryId" });
         }
 
@@ -78,7 +78,7 @@ namespace RemoraDiscordBot.Data.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "PermissionPermissionUser");
+                name: "PermissionDtoPermissionUser");
 
             migrationBuilder.DropTable(
                 name: "PermissionUsers");

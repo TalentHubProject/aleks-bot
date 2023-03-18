@@ -18,6 +18,7 @@ using RemoraDiscordBot.Core.Infrastructure;
 using RemoraDiscordBot.Core.Responders.AnyResponderLogging;
 using RemoraDiscordBot.Core.Responders.SelfResponder;
 using RemoraDiscordBot.Plugins.Experience;
+using RemoraDiscordBot.Plugins.Permission;
 using RemoraDiscordBot.Plugins.Welcomer;
 
 namespace RemoraDiscordBot.Core;
@@ -49,6 +50,7 @@ public static class Setup
                 .AddDiscordCommands(true)
                 .AddDiscordBotCoreCommands()
                 .AddExperiencePlugin()
+                .AddPermissionPlugin()
                 .AddWelcomerPlugin()
                 .AddAnyEventResponderLogging()
                 .AddDiscordBotInfrastructure()

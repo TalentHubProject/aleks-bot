@@ -3,12 +3,12 @@
 // See the LICENSE file in the project root for more information.
 
 using System.ComponentModel;
+using MediatR;
 using Remora.Commands.Attributes;
 using Remora.Commands.Groups;
 using Remora.Discord.API.Abstractions.Objects;
 using Remora.Discord.Commands.Conditions;
-using Remora.Results;
-using RemoraDiscordBot.Business.Infrastructure.Attributes;
+using Remora.Discord.Commands.Feedback.Services;
 
 namespace RemoraDiscordBot.Plugins.Permission.CommandGroups;
 
@@ -18,14 +18,26 @@ namespace RemoraDiscordBot.Plugins.Permission.CommandGroups;
 public class PermissionCommandGroup
     : CommandGroup
 {
-    [Command("add")]
-    [Description("Adds a permission to an user.")]
-    public async Task<Result> AddPermissionCommandAsync(
-        [Description("The user to add the permission to.")] [NoBot]
-        IUser user,
-        [Description("The permission to add to the user.")]
-        string permission)
+    private readonly FeedbackService _feedbackService;
+    private readonly IMediator _mediator;
+
+    public PermissionCommandGroup(
+        IMediator mediator,
+        FeedbackService feedbackService)
     {
-        return Result.FromSuccess();
+        _mediator = mediator;
+        _feedbackService = feedbackService;
+    }
+    
+    [Group("user")]
+    [Description("Commands to manage the permission of a user.")]
+    internal class UserPermissionCommandGroupSub
+    {
+    }
+
+    [Group("perm")]
+    [Description("Commands to manage the permission of a permission.")]
+    internal class PermissionPermissionCommandGroupSub
+    {
     }
 }

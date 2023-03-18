@@ -11,8 +11,8 @@ using RemoraDiscordBot.Data;
 namespace RemoraDiscordBot.Data.Migrations
 {
     [DbContext(typeof(RemoraDiscordBotDbContext))]
-    [Migration("20230318153536_PermissionInitialMigration")]
-    partial class PermissionInitialMigration
+    [Migration("20230318211352_PermissionSingleToMany")]
+    partial class PermissionSingleToMany
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -22,7 +22,7 @@ namespace RemoraDiscordBot.Data.Migrations
                 .HasAnnotation("ProductVersion", "7.0.1")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
-            modelBuilder.Entity("PermissionPermissionUser", b =>
+            modelBuilder.Entity("PermissionDtoPermissionUser", b =>
                 {
                     b.Property<int>("PermissionUsersId")
                         .HasColumnType("int");
@@ -37,7 +37,7 @@ namespace RemoraDiscordBot.Data.Migrations
 
                     b.HasIndex("PermissionsId", "PermissionsCategoryId");
 
-                    b.ToTable("PermissionPermissionUser");
+                    b.ToTable("PermissionDtoPermissionUser");
                 });
 
             modelBuilder.Entity("RemoraDiscordBot.Data.Domain.AutoRoles.AutoRoleChannel", b =>
@@ -141,7 +141,7 @@ namespace RemoraDiscordBot.Data.Migrations
                     b.ToTable("UserGuildXps");
                 });
 
-            modelBuilder.Entity("RemoraDiscordBot.Data.Domain.Permission.Permission", b =>
+            modelBuilder.Entity("RemoraDiscordBot.Data.Domain.Permission.PermissionDto", b =>
                 {
                     b.Property<int>("Id")
                         .HasColumnType("int");
@@ -208,7 +208,7 @@ namespace RemoraDiscordBot.Data.Migrations
                     b.ToTable("WelcomerGuilds");
                 });
 
-            modelBuilder.Entity("PermissionPermissionUser", b =>
+            modelBuilder.Entity("PermissionDtoPermissionUser", b =>
                 {
                     b.HasOne("RemoraDiscordBot.Data.Domain.Permission.PermissionUser", null)
                         .WithMany()
@@ -216,7 +216,7 @@ namespace RemoraDiscordBot.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("RemoraDiscordBot.Data.Domain.Permission.Permission", null)
+                    b.HasOne("RemoraDiscordBot.Data.Domain.Permission.PermissionDto", null)
                         .WithMany()
                         .HasForeignKey("PermissionsId", "PermissionsCategoryId")
                         .OnDelete(DeleteBehavior.Cascade)

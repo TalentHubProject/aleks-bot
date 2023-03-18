@@ -29,7 +29,7 @@ public class RemoraDiscordBotDbContext
     public DbSet<AutoRoleChannel> AutoRoleChannels { get; set; } = null!;
     public DbSet<AutoRoleReaction> AutoRoleReactions { get; set; } = null!;
     public DbSet<PersonalVocal> PersonalVocals { get; set; } = null!;
-    public DbSet<Permission> Permissions { get; set; } = null!;
+    public DbSet<PermissionDto> Permissions { get; set; } = null!;
     public DbSet<PermissionUser> PermissionUsers { get; set; } = null!;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -64,11 +64,10 @@ public class RemoraDiscordBotDbContext
         personalVocal
             .HasKey(x => x.GuildId);
 
-        modelBuilder.Entity<Permission>().HasKey(x => new {x.Id, x.CategoryId});
+        modelBuilder.Entity<PermissionDto>().HasKey(x => new {x.Id, x.CategoryId});
 
         permissionUser
             .HasMany(x => x.Permissions)
-            .WithMany(x => x.PermissionUsers)
             ;
     }
 }
