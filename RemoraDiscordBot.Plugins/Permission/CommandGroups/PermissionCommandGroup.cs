@@ -13,6 +13,7 @@ using Remora.Discord.Commands.Contexts;
 using Remora.Discord.Commands.Extensions;
 using Remora.Discord.Commands.Feedback.Services;
 using Remora.Results;
+using RemoraDiscordBot.Plugins.Permission.Commands;
 using RemoraDiscordBot.Plugins.Permission.Queries;
 
 namespace RemoraDiscordBot.Plugins.Permission.CommandGroups;
@@ -25,21 +26,21 @@ public class PermissionCommandGroup
 {
     [Group("user")]
     [Description("Commands to manage the permission of a user.")]
-    internal class UserPermissionCommandGroupSub
+    public class UserPermissionCommandGroupSub
         : CommandGroup
     {
-        private readonly IMediator _mediator;
         private readonly FeedbackService _feedbackService;
-        private readonly ITextCommandContext _textCommandContext;
+        private readonly IMediator _mediator;
+        private readonly ICommandContext _commandContext;
 
         public UserPermissionCommandGroupSub(
             IMediator mediator,
             FeedbackService feedbackService,
-            ITextCommandContext textCommandContext)
+            ICommandContext commandContext)
         {
             _mediator = mediator;
             _feedbackService = feedbackService;
-            _textCommandContext = textCommandContext;
+            _commandContext = commandContext;
         }
 
         [Command("add")]
@@ -51,32 +52,29 @@ public class PermissionCommandGroup
             [Description("The permission name to add to the user.")]
             string permission)
         {
-            if (!_textCommandContext.TryGetGuildID(out var guildId))
+            if (!_commandContext.TryGetGuildID(out var guildId))
             {
                 throw new InvalidOperationException("The command must be executed in a guild.");
             }
-            
+
             var permissionExists = await _mediator.Send(new PermissionExistsQuery(permission, guildId.Value));
             if (!permissionExists)
             {
                 return (Result) await _feedbackService.SendContextualErrorAsync(
-                    "The permission does not exist.");
+                    $"The permission does not exist, ensure to create it with `/permission perm add {permission}`.");
             }
-           /** 
-            var userHasPermission = await _mediator.Send(new UserHasPermissionRequest(user.ID, permission));
+
+            var userHasPermission =
+                await _mediator.Send(new UserHasPermissionQuery(user.ID, guildId.Value, permission));
             if (userHasPermission)
             {
                 return (Result) await _feedbackService.SendContextualErrorAsync(
                     "The user already has the permission.");
             }
-            
-            var addPermissionToUser = await _mediator.Send(new AddPermissionToUserRequest(user.ID, permission));
-            if (!addPermissionToUser)
-            {
-                return (Result) await _feedbackService.SendContextualErrorAsync(
-                    "An error occurred while adding the permission to the user.");
-            }**/
-           return Result.FromSuccess();
+
+            await _mediator.Send(new AddPermissionToUserCommand(user.ID, guildId.Value, permission));
+
+            return Result.FromSuccess();
         }
     }
 

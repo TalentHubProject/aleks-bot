@@ -15,10 +15,10 @@ public record PermissionExistsHandler(RemoraDiscordBotDbContext DbContext)
 {
     public async Task<bool> Handle(PermissionExistsQuery request, CancellationToken cancellationToken)
     {
-        return await DbContext.Permissions.AnyAsync(
+        return await DbContext.Permissions.FirstOrDefaultAsync(
             x =>
                 x.Name == request.PermissionName
-                && x.GuildId.ToSnowflake() == request.GuildId,
-            cancellationToken);
+                && x.GuildId == request.GuildId.ToLong(),
+            cancellationToken) is not null;
     }
 }
