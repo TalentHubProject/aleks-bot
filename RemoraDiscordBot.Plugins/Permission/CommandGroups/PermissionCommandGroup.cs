@@ -12,6 +12,7 @@ using Remora.Discord.Commands.Conditions;
 using Remora.Discord.Commands.Contexts;
 using Remora.Discord.Commands.Extensions;
 using Remora.Discord.Commands.Feedback.Services;
+using Remora.Rest.Core;
 using Remora.Results;
 using RemoraDiscordBot.Plugins.Permission.Commands;
 using RemoraDiscordBot.Plugins.Permission.Queries;
@@ -63,7 +64,7 @@ public class PermissionCommandGroup
                 return (Result) await _feedbackService.SendContextualErrorAsync(
                     $"The permission does not exist, ensure to create it with `/permission perm add {permission}`.");
             }
-
+            
             var userHasPermission =
                 await _mediator.Send(new UserHasPermissionQuery(user.ID, guildId.Value, permission));
             if (userHasPermission)
@@ -74,13 +75,48 @@ public class PermissionCommandGroup
 
             await _mediator.Send(new AddPermissionToUserCommand(user.ID, guildId.Value, permission));
 
-            return Result.FromSuccess();
+            return (Result) await _feedbackService.SendContextualSuccessAsync(
+                $"The permission `{permission}` has been added to the user `{user.Username}`.");
         }
     }
 
     [Group("perm")]
     [Description("Commands to manage the permission of a permission.")]
-    internal class PermissionPermissionCommandGroupSub
+    public class PermissionPermissionCommandGroupSub
+        : CommandGroup
     {
+        private readonly ICommandContext _commandContext;
+        private readonly IMediator _mediator;
+        private readonly FeedbackService _feedbackService;
+
+        public PermissionPermissionCommandGroupSub(
+            ICommandContext commandContext, 
+            IMediator mediator, 
+            FeedbackService feedbackService)
+        {
+            _commandContext = commandContext;
+            _mediator = mediator;
+            _feedbackService = feedbackService;
+        }
+
+        [Command("add")]
+        [Description("Add a permission to a category.")]
+        [Ephemeral]
+        public async Task<Result> AddPermissionCommandAsync(
+            [Description("The permission name to add.")]
+            string permission,
+            [Description("The category to add the permission to.")]
+            Snowflake category)
+        {
+            if (!_commandContext.TryGetGuildID(out var guildId))
+            {
+                throw new InvalidOperationException("The command must be executed in a guild.");
+            }
+            
+            await _mediator.Send(new AddPermissionCommand(guildId.Value, permission, category));
+            
+            return (Result) await _feedbackService.SendContextualSuccessAsync(
+                $"The permission `{permission}` has been added to the category `{category}`.");
+        }
     }
 }

@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using RemoraDiscordBot.Business.Extensions;
 using RemoraDiscordBot.Data;
+using RemoraDiscordBot.Data.Domain.Permission;
 using RemoraDiscordBot.Plugins.Permission.Commands;
 
 namespace RemoraDiscordBot.Plugins.Permission.Handlers.Commands;
@@ -40,6 +41,19 @@ public class AddPermissionToUserHandler
                 x => x.Name == request.PermissionName
                      && x.GuildId == request.GuildId.ToLong(),
                 cancellationToken);
+
+        if (user is null)
+        {
+            user = new PermissionUser
+            {
+                UserId = request.UserId.ToLong(),
+                GuildId = request.GuildId.ToLong()
+            };
+            
+            _dbContext.PermissionUsers.Add(user);
+            _logger.LogInformation("Created user {UserId} in guild {GuildId}.",
+                request.UserId, request.GuildId);
+        }
 
         user.Permissions.Add(permission);
         _logger.LogInformation("Added permission {PermissionName} to user {UserId} in guild {GuildId}.",

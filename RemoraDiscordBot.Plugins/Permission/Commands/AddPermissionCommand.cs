@@ -4,9 +4,11 @@
 
 using MediatR;
 using Remora.Rest.Core;
-using Remora.Results;
 
 namespace RemoraDiscordBot.Plugins.Permission.Commands;
 
-public record AddPermissionToUserCommand(Snowflake UserId, Snowflake GuildId, string PermissionName)
+public record AddPermissionCommand(
+        Snowflake GuildId,
+        string PermissionName,
+        Snowflake CategoryId)
     : IRequest;
