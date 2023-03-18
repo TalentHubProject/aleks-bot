@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RemoraDiscordBot.Data;
 
@@ -10,9 +11,11 @@ using RemoraDiscordBot.Data;
 namespace RemoraDiscordBot.Data.Migrations
 {
     [DbContext(typeof(RemoraDiscordBotDbContext))]
-    partial class RemoraDiscordBotDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230318211847_PermissionName")]
+    partial class PermissionName
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -128,16 +131,13 @@ namespace RemoraDiscordBot.Data.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("varchar(255)");
 
-                    b.Property<long>("GuildId")
-                        .HasColumnType("bigint");
-
                     b.Property<long>("CategoryId")
                         .HasColumnType("bigint");
 
                     b.Property<int?>("PermissionUserId")
                         .HasColumnType("int");
 
-                    b.HasKey("Id", "Name", "GuildId");
+                    b.HasKey("Id", "Name");
 
                     b.HasIndex("PermissionUserId");
 

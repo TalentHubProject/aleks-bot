@@ -9,6 +9,10 @@ namespace RemoraDiscordBot.Data.Domain.Permission;
 public sealed class PermissionDto
 {
     [Key] public int Id { get; set; }
+    
+    public long GuildId { get; set; }
+
+    public string Name { get; set; }
 
     public long CategoryId { get; set; }
 }

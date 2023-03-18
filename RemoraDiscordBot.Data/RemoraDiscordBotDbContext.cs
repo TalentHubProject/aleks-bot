@@ -64,7 +64,7 @@ public class RemoraDiscordBotDbContext
         personalVocal
             .HasKey(x => x.GuildId);
 
-        modelBuilder.Entity<PermissionDto>().HasKey(x => new {x.Id, x.CategoryId});
+        modelBuilder.Entity<PermissionDto>().HasKey(x => new {x.Id, x.Name, x.GuildId});
 
         permissionUser
             .HasMany(x => x.Permissions)

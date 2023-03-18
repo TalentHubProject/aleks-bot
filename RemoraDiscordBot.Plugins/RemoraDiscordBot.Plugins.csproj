@@ -27,8 +27,6 @@
       <Folder Include="AutoRoles\Responders" />
       <Folder Include="Permission\Commands" />
       <Folder Include="Permission\Handlers\Commands" />
-      <Folder Include="Permission\Handlers\Queries" />
-      <Folder Include="Permission\Queries" />
       <Folder Include="Permission\Responders" />
     </ItemGroup>
 
