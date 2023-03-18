@@ -6,6 +6,7 @@ using System.ComponentModel;
 using Remora.Commands.Attributes;
 using Remora.Commands.Groups;
 using Remora.Discord.API.Abstractions.Objects;
+using Remora.Discord.Commands.Conditions;
 using Remora.Results;
 using RemoraDiscordBot.Business.Infrastructure.Attributes;
 
@@ -13,6 +14,7 @@ namespace RemoraDiscordBot.Plugins.Permission.CommandGroups;
 
 [Group("permission")]
 [Description("Plugin to manage the permission feature.")]
+[RequireDiscordPermission(DiscordPermission.Administrator)]
 public class PermissionCommandGroup
     : CommandGroup
 {
