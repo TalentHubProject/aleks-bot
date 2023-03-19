@@ -9,6 +9,7 @@ using RemoraDiscordBot.Business.Extensions;
 using RemoraDiscordBot.Data;
 using RemoraDiscordBot.Data.Domain.Permission;
 using RemoraDiscordBot.Plugins.Permission.Commands;
+using RemoraDiscordBot.Plugins.Permission.Queries;
 
 namespace RemoraDiscordBot.Plugins.Permission.Handlers.Commands;
 
@@ -17,13 +18,16 @@ public class AddPermissionToUserHandler
 {
     private readonly RemoraDiscordBotDbContext _dbContext;
     private readonly ILogger<AddPermissionToUserHandler> _logger;
+    private readonly IMediator _mediator;
 
     public AddPermissionToUserHandler(
         RemoraDiscordBotDbContext dbContext,
-        ILogger<AddPermissionToUserHandler> logger)
+        ILogger<AddPermissionToUserHandler> logger,
+        IMediator mediator)
     {
         _dbContext = dbContext;
         _logger = logger;
+        _mediator = mediator;
     }
 
     protected override async Task Handle(
@@ -49,7 +53,7 @@ public class AddPermissionToUserHandler
                 UserId = request.UserId.ToLong(),
                 GuildId = request.GuildId.ToLong()
             };
-            
+
             _dbContext.PermissionUsers.Add(user);
             _logger.LogInformation("Created user {UserId} in guild {GuildId}.",
                 request.UserId, request.GuildId);
@@ -59,6 +63,8 @@ public class AddPermissionToUserHandler
         _logger.LogInformation("Added permission {PermissionName} to user {UserId} in guild {GuildId}.",
             request.PermissionName, request.UserId, request.GuildId);
 
+        await _mediator.Send(new NotifyUserPermissionChangeQuery(request.UserId, permission.Name, request.GuildId), cancellationToken);
+        
         await _dbContext.SaveChangesAsync(cancellationToken);
     }
 }

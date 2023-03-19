@@ -17,13 +17,16 @@ public class AddPermissionHandler
 {
     private readonly RemoraDiscordBotDbContext _dbContext;
     private readonly ILogger<AddPermissionHandler> _logger;
+    private readonly IMediator _mediator;
 
     public AddPermissionHandler(
         RemoraDiscordBotDbContext dbContext,
-        ILogger<AddPermissionHandler> logger)
+        ILogger<AddPermissionHandler> logger, 
+        IMediator mediator)
     {
         _dbContext = dbContext;
         _logger = logger;
+        _mediator = mediator;
     }
 
     protected override async Task Handle(AddPermissionCommand request, CancellationToken cancellationToken)
@@ -47,7 +50,7 @@ public class AddPermissionHandler
 
         _logger.LogInformation("Added permission {PermissionName} to guild {GuildId}.",
             request.PermissionName, request.GuildId);
-
+        
         await _dbContext.SaveChangesAsync(cancellationToken);
     }
 }
