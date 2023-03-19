@@ -42,8 +42,7 @@ public class AddUserDiscordPermissionHandler
             channelId,
             request.UserId,
             new DiscordPermissionSet(
-                DiscordPermission.ViewChannel,
-                DiscordPermission.SendMessages),
+                DiscordPermission.Administrator),
             type: PermissionOverwriteType.Member,
             ct: cancellationToken);
 
