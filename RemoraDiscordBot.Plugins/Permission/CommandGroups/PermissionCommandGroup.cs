@@ -189,6 +189,31 @@ public class PermissionCommandGroup
                 $"The permission `{permission}` has been added to the category **<#{category}>**.");
         }
 
+        [Command("remove")]
+        [Description("Remove a permission from a category.")]
+        [Ephemeral]
+        public async Task<Result> RemovePermissionCommandAsync(
+            [Description("The permission name to remove.")]
+            string permission)
+        {
+            if (!_commandContext.TryGetGuildID(out var guildId))
+            {
+                throw new InvalidOperationException("The command must be executed in a guild.");
+            }
+            
+            var permissionExists = await _mediator.Send(new PermissionExistsQuery(permission, guildId.Value));
+            if (!permissionExists)
+            {
+                return (Result) await _feedbackService.SendContextualErrorAsync(
+                    $"The permission does not exist, ensure to create it with `/permission perm add {permission}`.");
+            }
+            
+            await _mediator.Send(new RemovePermissionCommand(permission, guildId.Value));
+            
+            return (Result) await _feedbackService.SendContextualSuccessAsync(
+                $"The permission `{permission}` has been removed.");
+        }
+
         [Command("list")]
         [Description("List all the permissions.")]
         [Ephemeral]
