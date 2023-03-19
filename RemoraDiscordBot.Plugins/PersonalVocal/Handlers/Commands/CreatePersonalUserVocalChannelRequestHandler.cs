@@ -59,7 +59,7 @@ public sealed class CreatePersonalUserVocalChannelRequestHandler
         var editChannelPermissionsAsync = await _channelApi.EditChannelPermissionsAsync(
             channel.Entity.ID,
             request.UserId,
-            new DiscordPermissionSet(DiscordPermission.Administrator),
+            new DiscordPermissionSet(DiscordPermission.ManageChannels),
             type: PermissionOverwriteType.Member,
             ct: cancellationToken);
 
