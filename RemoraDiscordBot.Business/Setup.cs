@@ -5,6 +5,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Remora.Commands.Extensions;
 using RemoraDiscordBot.Business.Attributes;
+using RemoraDiscordBot.Business.Infrastructure.Services;
 
 namespace RemoraDiscordBot.Business;
 
@@ -15,6 +16,7 @@ public static class Setup
         return serviceCollection
                 .AddCondition<NoBotCondition>()
                 .AddCondition<NonSelfActionableCondition>()
+                .AddScoped<ICategoryRecursiveSubChannelRetrieverService, CategoryRecursiveSubChannelRetrieverService>()
             ;
     }
 }

@@ -7,6 +7,7 @@ using Remora.Discord.API.Abstractions.Objects;
 using Remora.Discord.API.Abstractions.Rest;
 using Remora.Discord.API.Objects;
 using RemoraDiscordBot.Business.Extensions;
+using RemoraDiscordBot.Business.Infrastructure.Services;
 using RemoraDiscordBot.Plugins.Permission.Commands;
 
 namespace RemoraDiscordBot.Plugins.Permission.Handlers.Commands;
@@ -14,15 +15,21 @@ namespace RemoraDiscordBot.Plugins.Permission.Handlers.Commands;
 public class AddUserDiscordPermissionHandler
     : AsyncRequestHandler<AddUserDiscordPermissionCommand>
 {
+    private readonly ICategoryRecursiveSubChannelRetrieverService _categoryRecursiveSubChannelRetrieverService;
     private readonly IDiscordRestChannelAPI _discordRestChannelAPI;
+    private readonly IDiscordRestGuildAPI _discordRestGuildAPI;
     private readonly IDiscordRestUserAPI _discordRestUserAPI;
 
     public AddUserDiscordPermissionHandler(
         IDiscordRestUserAPI discordRestUserApi,
-        IDiscordRestChannelAPI discordRestChannelApi)
+        IDiscordRestChannelAPI discordRestChannelApi,
+        ICategoryRecursiveSubChannelRetrieverService categoryRecursiveSubChannelRetrieverService,
+        IDiscordRestGuildAPI discordRestGuildApi)
     {
         _discordRestUserAPI = discordRestUserApi;
         _discordRestChannelAPI = discordRestChannelApi;
+        _categoryRecursiveSubChannelRetrieverService = categoryRecursiveSubChannelRetrieverService;
+        _discordRestGuildAPI = discordRestGuildApi;
     }
 
     protected override async Task Handle(
@@ -36,20 +43,26 @@ public class AddUserDiscordPermissionHandler
             throw new InvalidOperationException("The user does not exist.");
         }
 
-        var channelId = request.PermissionDto.CategoryId.ToSnowflake();
-
-        var editChannelPermissionsAsync = await _discordRestChannelAPI.EditChannelPermissionsAsync(
-            channelId,
-            request.UserId,
-            new DiscordPermissionSet(
-                DiscordPermission.Administrator),
-            type: PermissionOverwriteType.Member,
-            ct: cancellationToken);
-
-        if (!editChannelPermissionsAsync.IsSuccess)
+        var guild = await _discordRestGuildAPI.GetGuildAsync(request.GuildId, ct: cancellationToken);
+        if (!guild.IsSuccess)
         {
-            throw new InvalidOperationException("Cannot add permission for reason: " +
-                                                editChannelPermissionsAsync.Inner?.Error?.Message);
+            throw new InvalidOperationException("The guild does not exist.");
+        }
+
+        var categoryId = request.PermissionDto.CategoryId.ToSnowflake();
+        var categorySubChannels = await _categoryRecursiveSubChannelRetrieverService.GetRecursiveAsync(
+            guild.Entity,
+            categoryId);
+
+        foreach (var categorySubChannel in categorySubChannels.Entity)
+        {
+            await _discordRestChannelAPI.EditChannelPermissionsAsync(
+                categorySubChannel.ID,
+                request.UserId,
+                new DiscordPermissionSet(
+                    DiscordPermission.SendMessages,
+                    DiscordPermission.ViewChannel),
+                ct: cancellationToken);
         }
     }
 }
