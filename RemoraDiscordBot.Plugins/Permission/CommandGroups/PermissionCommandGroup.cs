@@ -16,6 +16,7 @@ using Remora.Discord.Commands.Feedback.Services;
 using Remora.Rest.Core;
 using Remora.Results;
 using RemoraDiscordBot.Business.Colors;
+using RemoraDiscordBot.Business.Infrastructure.Attributes;
 using RemoraDiscordBot.Plugins.Permission.Commands;
 using RemoraDiscordBot.Plugins.Permission.Queries;
 
@@ -79,6 +80,41 @@ public class PermissionCommandGroup
 
             return (Result) await _feedbackService.SendContextualSuccessAsync(
                 $"The permission `{permission}` has been added to the user `{user.Username}`.");
+        }
+        
+        [Command("remove")]
+        [Description("Remove a permission from a user.")]
+        [Ephemeral]
+        public async Task<Result> RemoveUserPermissionCommandAsync(
+            [Description("The user to remove the permission from.")][NoBot]
+            IUser user,
+            [Description("The permission name to remove from the user.")]
+            string permission)
+        {
+            if (!_commandContext.TryGetGuildID(out var guildId))
+            {
+                throw new InvalidOperationException("The command must be executed in a guild.");
+            }
+
+            var permissionExists = await _mediator.Send(new PermissionExistsQuery(permission, guildId.Value));
+            if (!permissionExists)
+            {
+                return (Result) await _feedbackService.SendContextualErrorAsync(
+                    $"The permission does not exist, ensure to create it with `/permission perm add {permission}`.");
+            }
+
+            var userHasPermission =
+                await _mediator.Send(new UserHasPermissionQuery(user.ID, guildId.Value, permission));
+            if (!userHasPermission)
+            {
+                return (Result) await _feedbackService.SendContextualErrorAsync(
+                    "The user does not have the permission.");
+            }
+
+            await _mediator.Send(new RemovePermissionFromUserCommand(user.ID, guildId.Value, permission));
+
+            return (Result) await _feedbackService.SendContextualSuccessAsync(
+                $"The permission `{permission}` has been removed from the user `{user.Username}`.");
         }
     }
 
