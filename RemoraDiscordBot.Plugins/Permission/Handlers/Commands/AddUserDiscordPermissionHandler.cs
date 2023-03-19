@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using MediatR;
+using Microsoft.Extensions.Logging;
 using Remora.Discord.API.Abstractions.Objects;
 using Remora.Discord.API.Abstractions.Rest;
 using Remora.Discord.API.Objects;
@@ -16,34 +17,37 @@ public class AddUserDiscordPermissionHandler
     : AsyncRequestHandler<AddUserDiscordPermissionCommand>
 {
     private readonly ICategoryRecursiveSubChannelRetrieverService _categoryRecursiveSubChannelRetrieverService;
-    private readonly IDiscordRestChannelAPI _discordRestChannelAPI;
-    private readonly IDiscordRestGuildAPI _discordRestGuildAPI;
-    private readonly IDiscordRestUserAPI _discordRestUserAPI;
+    private readonly IDiscordRestChannelAPI _discordRestChannelApi;
+    private readonly IDiscordRestGuildAPI _discordRestGuildApi;
+    private readonly IDiscordRestUserAPI _discordRestUserApi;
+    private readonly ILogger<AddUserDiscordPermissionHandler> _logger;
 
     public AddUserDiscordPermissionHandler(
         IDiscordRestUserAPI discordRestUserApi,
         IDiscordRestChannelAPI discordRestChannelApi,
         ICategoryRecursiveSubChannelRetrieverService categoryRecursiveSubChannelRetrieverService,
-        IDiscordRestGuildAPI discordRestGuildApi)
+        IDiscordRestGuildAPI discordRestGuildApi,
+        ILogger<AddUserDiscordPermissionHandler> logger)
     {
-        _discordRestUserAPI = discordRestUserApi;
-        _discordRestChannelAPI = discordRestChannelApi;
+        _discordRestUserApi = discordRestUserApi;
+        _discordRestChannelApi = discordRestChannelApi;
         _categoryRecursiveSubChannelRetrieverService = categoryRecursiveSubChannelRetrieverService;
-        _discordRestGuildAPI = discordRestGuildApi;
+        _discordRestGuildApi = discordRestGuildApi;
+        _logger = logger;
     }
 
     protected override async Task Handle(
         AddUserDiscordPermissionCommand request,
         CancellationToken cancellationToken)
     {
-        var user = await _discordRestUserAPI.GetUserAsync(request.UserId, cancellationToken);
+        var user = await _discordRestUserApi.GetUserAsync(request.UserId, cancellationToken);
 
         if (!user.IsSuccess)
         {
             throw new InvalidOperationException("The user does not exist.");
         }
 
-        var guild = await _discordRestGuildAPI.GetGuildAsync(request.GuildId, ct: cancellationToken);
+        var guild = await _discordRestGuildApi.GetGuildAsync(request.GuildId, ct: cancellationToken);
         if (!guild.IsSuccess)
         {
             throw new InvalidOperationException("The guild does not exist.");
@@ -54,14 +58,20 @@ public class AddUserDiscordPermissionHandler
             guild.Entity,
             categoryId);
 
+        _logger.LogInformation(
+            "Retrieved {CategorySubChannelsCount} sub channels for category {CategoryId}.",
+            categorySubChannels.Entity.Count,
+            categoryId);
+
         foreach (var categorySubChannel in categorySubChannels.Entity)
         {
-            await _discordRestChannelAPI.EditChannelPermissionsAsync(
+            await _discordRestChannelApi.EditChannelPermissionsAsync(
                 categorySubChannel.ID,
                 request.UserId,
                 new DiscordPermissionSet(
                     DiscordPermission.SendMessages,
                     DiscordPermission.ViewChannel),
+                type: PermissionOverwriteType.Member,
                 ct: cancellationToken);
         }
     }
