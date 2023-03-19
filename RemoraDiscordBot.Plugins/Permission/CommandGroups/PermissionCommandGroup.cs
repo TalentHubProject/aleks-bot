@@ -81,12 +81,12 @@ public class PermissionCommandGroup
             return (Result) await _feedbackService.SendContextualSuccessAsync(
                 $"The permission `{permission}` has been added to the user `{user.Username}`.");
         }
-        
+
         [Command("remove")]
         [Description("Remove a permission from a user.")]
         [Ephemeral]
         public async Task<Result> RemoveUserPermissionCommandAsync(
-            [Description("The user to remove the permission from.")][NoBot]
+            [Description("The user to remove the permission from.")] [NoBot]
             IUser user,
             [Description("The permission name to remove from the user.")]
             string permission)
@@ -115,6 +115,30 @@ public class PermissionCommandGroup
 
             return (Result) await _feedbackService.SendContextualSuccessAsync(
                 $"The permission `{permission}` has been removed from the user `{user.Username}`.");
+        }
+
+        [Command("list")]
+        [Description("List all the permissions of a user.")]
+        [Ephemeral]
+        public async Task<Result> ListUserPermissionCommandAsync(
+            [Description("The user to list the permissions from.")]
+            IUser user)
+        {
+            if (!_commandContext.TryGetGuildID(out var guildId))
+            {
+                throw new InvalidOperationException("The command must be executed in a guild.");
+            }
+
+            var permissions = await _mediator.Send(new GetUserPermissionQuery(user.ID, guildId.Value));
+
+            var embed = new Embed
+            {
+                Title = $"Permissions of {user.Username}",
+                Colour = DiscordTransparentColor.Value,
+                Fields = permissions.Select(p => new EmbedField(p, "✅")).ToList()
+            };
+
+            return (Result) await _feedbackService.SendContextualEmbedAsync(embed);
         }
     }
 
