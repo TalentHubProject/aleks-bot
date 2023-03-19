@@ -63,6 +63,7 @@ public class AddPermissionToUserHandler
         _logger.LogInformation("Added permission {PermissionName} to user {UserId} in guild {GuildId}.",
             request.PermissionName, request.UserId, request.GuildId);
 
+        await _mediator.Send(new AddUserDiscordPermissionCommand(request.UserId, permission, request.GuildId), cancellationToken);
         await _mediator.Send(new NotifyUserPermissionChangeQuery(request.UserId, permission.Name, request.GuildId), cancellationToken);
         
         await _dbContext.SaveChangesAsync(cancellationToken);
