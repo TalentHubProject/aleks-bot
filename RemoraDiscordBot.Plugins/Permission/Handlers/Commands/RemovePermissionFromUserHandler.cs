@@ -16,13 +16,16 @@ public class RemovePermissionFromUserHandler
 {
     private readonly RemoraDiscordBotDbContext _dbContext;
     private readonly FeedbackService _feedbackService;
+    private readonly IMediator _mediator;
 
     public RemovePermissionFromUserHandler(
         RemoraDiscordBotDbContext dbContext,
-        FeedbackService feedbackService)
+        FeedbackService feedbackService,
+        IMediator mediator)
     {
         _dbContext = dbContext;
         _feedbackService = feedbackService;
+        _mediator = mediator;
     }
 
     protected override async Task Handle(
@@ -55,6 +58,12 @@ public class RemovePermissionFromUserHandler
         }
 
         user.Permissions.Remove(permission);
+
+        await _mediator.Send(new RemoveUserDiscordPermissionCommand(
+                request.UserId,
+                request.GuildId,
+                request.PermissionName),
+            cancellationToken);
 
         await _dbContext.SaveChangesAsync(cancellationToken);
     }
