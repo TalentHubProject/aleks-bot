@@ -57,9 +57,5 @@ public class RemovePermissionFromUserHandler
         user.Permissions.Remove(permission);
 
         await _dbContext.SaveChangesAsync(cancellationToken);
-
-        await _feedbackService.SendContextualSuccessAsync(
-            "The permission has been removed from the user.",
-            ct: cancellationToken);
     }
 }
