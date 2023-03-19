@@ -7,6 +7,7 @@ using MediatR;
 using Remora.Commands.Attributes;
 using Remora.Commands.Groups;
 using Remora.Discord.API.Abstractions.Objects;
+using Remora.Discord.API.Objects;
 using Remora.Discord.Commands.Attributes;
 using Remora.Discord.Commands.Conditions;
 using Remora.Discord.Commands.Contexts;
@@ -14,6 +15,7 @@ using Remora.Discord.Commands.Extensions;
 using Remora.Discord.Commands.Feedback.Services;
 using Remora.Rest.Core;
 using Remora.Results;
+using RemoraDiscordBot.Business.Colors;
 using RemoraDiscordBot.Plugins.Permission.Commands;
 using RemoraDiscordBot.Plugins.Permission.Queries;
 
@@ -30,9 +32,9 @@ public class PermissionCommandGroup
     public class UserPermissionCommandGroupSub
         : CommandGroup
     {
+        private readonly ICommandContext _commandContext;
         private readonly FeedbackService _feedbackService;
         private readonly IMediator _mediator;
-        private readonly ICommandContext _commandContext;
 
         public UserPermissionCommandGroupSub(
             IMediator mediator,
@@ -64,7 +66,7 @@ public class PermissionCommandGroup
                 return (Result) await _feedbackService.SendContextualErrorAsync(
                     $"The permission does not exist, ensure to create it with `/permission perm add {permission}`.");
             }
-            
+
             var userHasPermission =
                 await _mediator.Send(new UserHasPermissionQuery(user.ID, guildId.Value, permission));
             if (userHasPermission)
@@ -86,12 +88,12 @@ public class PermissionCommandGroup
         : CommandGroup
     {
         private readonly ICommandContext _commandContext;
-        private readonly IMediator _mediator;
         private readonly FeedbackService _feedbackService;
+        private readonly IMediator _mediator;
 
         public PermissionPermissionCommandGroupSub(
-            ICommandContext commandContext, 
-            IMediator mediator, 
+            ICommandContext commandContext,
+            IMediator mediator,
             FeedbackService feedbackService)
         {
             _commandContext = commandContext;
@@ -112,13 +114,33 @@ public class PermissionCommandGroup
             {
                 throw new InvalidOperationException("The command must be executed in a guild.");
             }
-            
+
             await _mediator.Send(new AddPermissionCommand(guildId.Value, permission, category));
-            
+
             return (Result) await _feedbackService.SendContextualSuccessAsync(
-                $"The permission `{permission}` has been added to the category `{category}`.");
+                $"The permission `{permission}` has been added to the category **<#{category}>**.");
         }
-        
-        
+
+        [Command("list")]
+        [Description("List all the permissions.")]
+        [Ephemeral]
+        public async Task<Result> ListPermissionCommandAsync()
+        {
+            if (!_commandContext.TryGetGuildID(out var guildId))
+            {
+                throw new InvalidOperationException("The command must be executed in a guild.");
+            }
+
+            var permissions = await _mediator.Send(new ListPermissionsQuery(guildId.Value));
+
+            var embed = new Embed
+            {
+                Title = "Permissions",
+                Colour = DiscordTransparentColor.Value,
+                Description = string.Join("\n", permissions.Select(x => $"- `{x.Name}` - **<#{x.CategoryId}>**"))
+            };
+
+            return (Result) await _feedbackService.SendContextualEmbedAsync(embed);
+        }
     }
 }
