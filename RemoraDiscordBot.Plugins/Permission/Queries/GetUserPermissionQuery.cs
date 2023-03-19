@@ -8,4 +8,4 @@ using Remora.Rest.Core;
 namespace RemoraDiscordBot.Plugins.Permission.Queries;
 
 public record GetUserPermissionQuery(Snowflake UserId, Snowflake GuildId)
-    : IRequest<IEnumerable<string>>;
+    : IRequest<IReadOnlyList<string>>;

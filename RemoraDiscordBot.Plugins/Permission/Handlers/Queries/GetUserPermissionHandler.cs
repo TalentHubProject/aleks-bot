@@ -11,9 +11,9 @@ using RemoraDiscordBot.Plugins.Permission.Queries;
 namespace RemoraDiscordBot.Plugins.Permission.Handlers.Queries;
 
 public record GetUserPermissionHandler(RemoraDiscordBotDbContext DbContext)
-    : IRequestHandler<GetUserPermissionQuery, IEnumerable<string>>
+    : IRequestHandler<GetUserPermissionQuery, IReadOnlyList<string>>
 {
-    public async Task<IEnumerable<string>> Handle(GetUserPermissionQuery request, CancellationToken cancellationToken)
+    public async Task<IReadOnlyList<string>> Handle(GetUserPermissionQuery request, CancellationToken cancellationToken)
     {
         var user = await DbContext.PermissionUsers
             .Include(x => x.Permissions)
@@ -22,6 +22,7 @@ public record GetUserPermissionHandler(RemoraDiscordBotDbContext DbContext)
                      && x.GuildId == request.GuildId.ToLong(),
                 cancellationToken);
 
-        return user?.Permissions.Select(x => x.Name) ?? Enumerable.Empty<string>();
+        return user?.Permissions.Select(x => x.Name).ToList() 
+               ?? new List<string>();
     }
 }

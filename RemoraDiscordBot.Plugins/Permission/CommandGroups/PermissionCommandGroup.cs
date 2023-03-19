@@ -17,6 +17,7 @@ using Remora.Rest.Core;
 using Remora.Results;
 using RemoraDiscordBot.Business.Colors;
 using RemoraDiscordBot.Business.Infrastructure.Attributes;
+using RemoraDiscordBot.Data.Domain.Permission;
 using RemoraDiscordBot.Plugins.Permission.Commands;
 using RemoraDiscordBot.Plugins.Permission.Queries;
 
@@ -45,6 +46,13 @@ public class PermissionCommandGroup
             _mediator = mediator;
             _feedbackService = feedbackService;
             _commandContext = commandContext;
+        }
+        
+        private List<EmbedField> GetPermissionEmbedFields(IReadOnlyList<string> permissions)
+        {
+            return !permissions.Any() 
+                ? new List<EmbedField> { new EmbedField("This user has no permission.", "❌", true) } 
+                : permissions.Select(permission => new EmbedField(permission, "✅", true)).ToList();
         }
 
         [Command("add")]
@@ -135,7 +143,7 @@ public class PermissionCommandGroup
             {
                 Title = $"Permissions of {user.Username}",
                 Colour = DiscordTransparentColor.Value,
-                Fields = permissions.Select(p => new EmbedField(p, "✅")).ToList()
+                Fields = GetPermissionEmbedFields(permissions)
             };
 
             return (Result) await _feedbackService.SendContextualEmbedAsync(embed);
