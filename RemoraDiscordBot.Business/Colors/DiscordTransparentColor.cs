@@ -10,4 +10,6 @@ public struct DiscordTransparentColor
 {
     //2F3136
     public static Color Value => Color.FromArgb(47, 49, 54);
+
+    public static Color LogoColor => Color.FromArgb(126, 179, 141);
 }

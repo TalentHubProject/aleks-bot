@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System.ComponentModel;
+using System.Drawing;
 using Remora.Commands.Attributes;
 using Remora.Commands.Groups;
 using Remora.Discord.API;
@@ -39,7 +40,9 @@ public class InformationalMessageCreatorCommandGroup
     [Command("informational-message")]
     [Description("Creates an informational message.")]
     [RequireDiscordPermission(DiscordPermission.Administrator)]
-    public async Task<Result> InformationalMessageCreatorCommandAsync(string message)
+    public async Task<Result> InformationalMessageCreatorCommandAsync(
+        string title,
+        string message)
     {
         if (!_commandContext.TryGetGuildID(out var guildId))
         {
@@ -52,9 +55,9 @@ public class InformationalMessageCreatorCommandGroup
         return (Result) await _feedbackService.SendContextualEmbedAsync(
             new Embed
             {
-                Title = "Informational Message",
+                Title = title,
                 Description = message,
-                Colour = DiscordTransparentColor.Value,
+                Colour = DiscordTransparentColor.LogoColor,
                 Thumbnail = guildIconUri.IsSuccess
                     ? new EmbedThumbnail(guildIconUri.Entity.ToString())
                     : null
