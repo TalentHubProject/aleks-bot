@@ -52,15 +52,14 @@ public class InformationalMessageCreatorCommandGroup
         var guild = await _discordRestGuildApi.GetGuildAsync(guildId.Value, ct: CancellationToken);
         var guildIconUri = CDN.GetGuildIconUrl(guild.Entity);
 
+        message = message.Replace("|", "\n");
+
         return (Result) await _feedbackService.SendContextualEmbedAsync(
             new Embed
             {
                 Title = title,
                 Description = message,
                 Colour = DiscordTransparentColor.LogoColor,
-                Thumbnail = guildIconUri.IsSuccess
-                    ? new EmbedThumbnail(guildIconUri.Entity.ToString())
-                    : null
             },
             new FeedbackMessageOptions
             {
