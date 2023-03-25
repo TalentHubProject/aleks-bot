@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System.ComponentModel;
-using System.Drawing;
 using Remora.Commands.Attributes;
 using Remora.Commands.Groups;
 using Remora.Discord.API;
@@ -13,7 +12,6 @@ using Remora.Discord.API.Objects;
 using Remora.Discord.Commands.Conditions;
 using Remora.Discord.Commands.Contexts;
 using Remora.Discord.Commands.Extensions;
-using Remora.Discord.Commands.Feedback.Messages;
 using Remora.Discord.Commands.Feedback.Services;
 using Remora.Results;
 using RemoraDiscordBot.Business.Colors;
@@ -24,17 +22,17 @@ public class InformationalMessageCreatorCommandGroup
     : CommandGroup
 {
     private readonly ICommandContext _commandContext;
+    private readonly IDiscordRestChannelAPI _discordRestChannelApi;
     private readonly IDiscordRestGuildAPI _discordRestGuildApi;
-    private readonly FeedbackService _feedbackService;
 
     public InformationalMessageCreatorCommandGroup(
         ICommandContext commandContext,
-        FeedbackService feedbackService,
-        IDiscordRestGuildAPI discordRestGuildApi)
+        IDiscordRestGuildAPI discordRestGuildApi,
+        IDiscordRestChannelAPI discordRestChannelApi)
     {
         _commandContext = commandContext;
-        _feedbackService = feedbackService;
         _discordRestGuildApi = discordRestGuildApi;
+        _discordRestChannelApi = discordRestChannelApi;
     }
 
     [Command("informational-message")]
@@ -49,22 +47,27 @@ public class InformationalMessageCreatorCommandGroup
             throw new InvalidOperationException("Could not get guild ID.");
         }
 
+        if (!_commandContext.TryGetChannelID(out var channelId))
+        {
+            throw new InvalidOperationException("Could not get channel ID.");
+        }
+
         var guild = await _discordRestGuildApi.GetGuildAsync(guildId.Value, ct: CancellationToken);
         var guildIconUri = CDN.GetGuildIconUrl(guild.Entity);
 
         message = message.Replace("|", "\n");
 
-        return (Result) await _feedbackService.SendContextualEmbedAsync(
-            new Embed
+        return (Result) await _discordRestChannelApi.CreateMessageAsync(
+            channelId.Value,
+            embeds: new[]
             {
-                Title = title,
-                Description = message,
-                Colour = DiscordTransparentColor.LogoColor,
+                new Embed
+                {
+                    Title = title,
+                    Description = message,
+                    Colour = DiscordTransparentColor.LogoColor
+                }
             },
-            new FeedbackMessageOptions
-            {
-                MessageFlags = MessageFlags.Urgent
-            },
-            CancellationToken);
+            ct: CancellationToken);
     }
 }
