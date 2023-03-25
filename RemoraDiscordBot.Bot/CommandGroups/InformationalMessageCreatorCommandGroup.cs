@@ -57,7 +57,7 @@ public class InformationalMessageCreatorCommandGroup
 
         message = message.Replace("|", "\n");
 
-        return (Result) await _discordRestChannelApi.CreateMessageAsync(
+        await _discordRestChannelApi.CreateMessageAsync(
             channelId.Value,
             embeds: new[]
             {
@@ -69,5 +69,7 @@ public class InformationalMessageCreatorCommandGroup
                 }
             },
             ct: CancellationToken);
+        
+        return Result.FromSuccess();
     }
 }
