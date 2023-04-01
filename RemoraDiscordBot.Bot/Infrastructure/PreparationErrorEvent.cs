@@ -13,6 +13,9 @@ using Remora.Results;
 
 namespace RemoraDiscordBot.Core.Infrastructure;
 
+/// <summary>
+///     A preparation error event.
+/// </summary>
 public class PreparationErrorEvent
     : IPreparationErrorEvent
 {
@@ -27,6 +30,13 @@ public class PreparationErrorEvent
         _feedbackService = feedbackService;
     }
 
+    /// <summary>
+    ///     The event that is called when a command preparation fails.
+    /// </summary>
+    /// <param name="context">The operation context.</param>
+    /// <param name="preparationResult">The result of the preparation.</param>
+    /// <param name="ct">The cancellation token.</param>
+    /// <returns>A <see cref="Result" /> representing the result of the asynchronous operation.</returns>
     public async Task<Result> PreparationFailed(
         IOperationContext context,
         IResult preparationResult,

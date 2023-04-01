@@ -6,6 +6,9 @@ using System.Runtime.Serialization;
 
 namespace RemoraDiscordBot.Core.Exceptions;
 
+/// <summary>
+///    The exception that is thrown when the bot token is null.
+/// </summary>
 [Serializable]
 public class BotTokenCannotBeNullException
     : Exception

@@ -12,12 +12,14 @@ using Remora.Discord.API.Objects;
 using Remora.Discord.Commands.Conditions;
 using Remora.Discord.Commands.Contexts;
 using Remora.Discord.Commands.Extensions;
-using Remora.Discord.Commands.Feedback.Services;
 using Remora.Results;
 using RemoraDiscordBot.Business.Colors;
 
 namespace RemoraDiscordBot.Core.CommandGroups;
 
+/// <summary>
+///     A command group for the informational message creator command.
+/// </summary>
 public class InformationalMessageCreatorCommandGroup
     : CommandGroup
 {
@@ -35,6 +37,13 @@ public class InformationalMessageCreatorCommandGroup
         _discordRestChannelApi = discordRestChannelApi;
     }
 
+    /// <summary>
+    ///     Creates an informational message.
+    /// </summary>
+    /// <param name="title">The title of the message.</param>
+    /// <param name="message">The message.</param>
+    /// <returns>A <see cref="Result" /> representing the result of the command.</returns>
+    /// <exception cref="InvalidOperationException">Could not get guild ID or the channel ID.</exception>
     [Command("informational-message")]
     [Description("Creates an informational message.")]
     [RequireDiscordPermission(DiscordPermission.Administrator)]
@@ -69,7 +78,7 @@ public class InformationalMessageCreatorCommandGroup
                 }
             },
             ct: CancellationToken);
-        
+
         return Result.FromSuccess();
     }
 }

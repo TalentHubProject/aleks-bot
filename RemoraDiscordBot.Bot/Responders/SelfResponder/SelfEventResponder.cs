@@ -11,6 +11,9 @@ using RemoraDiscordBot.Business.Colors;
 
 namespace RemoraDiscordBot.Core.Responders.SelfResponder;
 
+/// <summary>
+///    The responder that responds to self mentions.
+/// </summary>
 public sealed class SelfEventResponder
     : IResponder<MessageCreate>
 {
@@ -25,6 +28,12 @@ public sealed class SelfEventResponder
         _discordRestUserApi = discordRestUserApi;
     }
 
+    /// <summary>
+    ///    Responds to an event.
+    /// </summary>
+    /// <param name="gatewayEvent">The event.</param>
+    /// <param name="ct">The cancellation token.</param>
+    /// <returns>A <see cref="Result" /> representing the result of the operation.</returns>
     public async Task<Result> RespondAsync(
         MessageCreate gatewayEvent,
         CancellationToken ct = default)
