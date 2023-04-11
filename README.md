@@ -58,7 +58,7 @@ You need to have the following software installed on your computer:
 
 1. Clone the repo
    ```sh
-   $ git clone https://github.com/TalentHubDiscord/Aleks-Bot.git
+   $ git clone https://github.com/TalentHubProject/Aleks-Bot.git
    ```
 2. Change directory
    ```sh
