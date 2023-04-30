@@ -12,7 +12,8 @@ public class UserGuildCreature
     {
         "Snake",
         "Cat",
-        "Cow"
+        "Cow",
+        "Mouse"
     };
 
     public UserGuildCreature()
