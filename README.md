@@ -9,7 +9,7 @@
 
 
 <p align="center">
-  <a href="https://discord.gg/RvjSrJD5mj">
+  <a href="https://discord.gg/humans">
     <img src="https://discordapp.com/api/guilds/1057360697887051806/widget.png?style=shield" alt="Talent Hub's discord server">
   </a>
   <a href="https://github.com/Nihlus/Remora.Discord">

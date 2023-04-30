@@ -4,6 +4,7 @@
 
 using System.Text.RegularExpressions;
 using Remora.Discord.API.Abstractions.Gateway.Events;
+using Remora.Discord.API.Abstractions.Objects;
 using Remora.Discord.API.Abstractions.Rest;
 using Remora.Discord.Commands.Feedback.Services;
 using Remora.Discord.Gateway.Responders;
@@ -30,13 +31,27 @@ public class UserMessageAdvertisementGuardResponder
 
     public async Task<Result> RespondAsync(IMessageCreate gatewayEvent, CancellationToken ct = default)
     {
-        if (gatewayEvent.Author.IsBot is {HasValue: true, Value: true}) return Result.FromSuccess();
+        if (gatewayEvent.Author.IsBot is {HasValue: true, Value: true})
+        {
+            return Result.FromSuccess();
+        }
+        
+        if (gatewayEvent.Member.Value.Permissions.Value.HasPermission(DiscordTextPermission.ManageMessages))
+        {
+            return Result.FromSuccess();
+        }
 
         var message = gatewayEvent.Content;
-        if (string.IsNullOrWhiteSpace(message)) return Result.FromSuccess();
+        if (string.IsNullOrWhiteSpace(message))
+        {
+            return Result.FromSuccess();
+        }
 
         var match = Regex.Match(message, DISCORD_INVITE_REGEX, RegexOptions.IgnoreCase);
-        if (!match.Success) return Result.FromSuccess();
+        if (!match.Success)
+        {
+            return Result.FromSuccess();
+        }
 
         await _channelApi.DeleteMessageAsync(gatewayEvent.ChannelID, gatewayEvent.ID, ct: ct);
 
