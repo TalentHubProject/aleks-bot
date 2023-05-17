@@ -1,20 +1,23 @@
+﻿FROM mcr.microsoft.com/dotnet/runtime:7.0 AS base
+WORKDIR /app
+
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
-WORKDIR /app
-
-COPY RemoraDiscordBot.Worker/RemoraDiscordBot.Worker.csproj .
-RUN dotnet restore
-
+WORKDIR /src
+COPY ["RemoraDiscordBot.Worker/RemoraDiscordBot.Worker.csproj", "RemoraDiscordBot.Worker/"]
+COPY ["RemoraDiscordBot.Bot/RemoraDiscordBot.Bot.csproj", "RemoraDiscordBot.Bot/"]
+COPY ["RemoraDiscordBot.Business/RemoraDiscordBot.Business.csproj", "RemoraDiscordBot.Business/"]
+COPY ["RemoraDiscordBot.Data/RemoraDiscordBot.Data.csproj", "RemoraDiscordBot.Data/"]
+COPY ["RemoraDiscordBot.Data.Domain/RemoraDiscordBot.Data.Domain.csproj", "RemoraDiscordBot.Data.Domain/"]
+COPY ["RemoraDiscordBot.Plugins/RemoraDiscordBot.Plugins.csproj", "RemoraDiscordBot.Plugins/"]
+RUN dotnet restore "RemoraDiscordBot.Worker/RemoraDiscordBot.Worker.csproj"
 COPY . .
+WORKDIR "/src/RemoraDiscordBot.Worker"
+RUN dotnet build "RemoraDiscordBot.Worker.csproj" -c Release -o /app/build
 
-RUN dotnet build -c Release --no-restore
+FROM build AS publish
+RUN dotnet publish "RemoraDiscordBot.Worker.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
-RUN dotnet publish -c Release --no-restore -o out
-
-FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS runtime
+FROM base AS final
 WORKDIR /app
-
-COPY --from=build /app/out .
-
-ENV PROJECT_NAME RemoraDiscordBot.Worker
-
-CMD dotnet $PROJECT_NAME.dll
+COPY --from=publish /app/publish .
+ENTRYPOINT ["dotnet", "RemoraDiscordBot.Worker.dll"]
