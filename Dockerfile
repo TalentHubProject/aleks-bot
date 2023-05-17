@@ -1,7 +1,7 @@
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /app
 
-COPY RemoraDiscordBot.Worker.csproj .
+COPY RemoraDiscordBot.Worker/RemoraDiscordBot.Worker.csproj .
 RUN dotnet restore
 
 COPY . .
