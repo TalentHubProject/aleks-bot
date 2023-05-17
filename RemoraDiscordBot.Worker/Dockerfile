@@ -1,7 +1,7 @@
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /app
 
-COPY MyProject.Worker.csproj .
+COPY RemoraDiscordBot.Worker.csproj .
 RUN dotnet restore
 
 COPY . .
@@ -15,6 +15,6 @@ WORKDIR /app
 
 COPY --from=build /app/out .
 
-ENV PROJECT_NAME MyProject.Worker
+ENV PROJECT_NAME RemoraDiscordBot.Worker
 
 CMD dotnet $PROJECT_NAME.dll
