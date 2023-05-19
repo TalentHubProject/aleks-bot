@@ -50,4 +50,8 @@ var host = Host.CreateDefaultBuilder(args)
     )
     .Build();
 
+using var scope = host.Services.CreateScope();
+var dbContext = scope.ServiceProvider.GetRequiredService<RemoraDiscordBotDbContext>();
+await dbContext.Database.MigrateAsync();
+
 await host.RunAsync();
