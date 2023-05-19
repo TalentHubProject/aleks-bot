@@ -47,8 +47,8 @@ public sealed record GetCreatureOrEggByUserHandler(
         
         var url = userGuildXp.Creature.IsEgg switch
         {
-            true => $"http://{baseAddress}:5106/api/v1/Egg?Type={userGuildXp.Creature.CreatureType}&Cracks={level}",
-            false => $"http://{baseAddress}:5106/api/v1/Creature?Type={userGuildXp.Creature.CreatureType}&Age={level}"
+            true => $"http://{baseAddress}/api/v1/Egg?Type={userGuildXp.Creature.CreatureType}&Cracks={level}",
+            false => $"http://{baseAddress}/api/v1/Creature?Type={userGuildXp.Creature.CreatureType}&Age={level}"
         };
 
         Logger.LogInformation("Calling {Url}", url);
