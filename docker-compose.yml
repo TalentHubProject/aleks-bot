@@ -1,0 +1,10 @@
+version: '3.8'
+services:
+  bot:
+    image: bitnami/dotnet-sdk:latest
+    command: ["dotnet", "run", "--no-restore", "--configuration", "Release", "--project", "RemoraDiscordBot.Worker/RemoraDiscordBot.Worker.csproj"]
+    volumes:
+      - ./:/app
+    working_dir: /app
+    env_file:
+      - .env
