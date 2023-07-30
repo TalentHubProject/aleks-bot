@@ -35,7 +35,7 @@ public class CreditCommandGroup
         return (Result) await _feedbackService.SendContextualEmbedAsync(
             new Embed
             {
-                Title = "Credits",
+                Title = "Credits Test",
                 Description = "This bot was made by Alexis Chân Gridel. " +
                               "It is licensed under the GNU General Public License v3.0. "
             },
