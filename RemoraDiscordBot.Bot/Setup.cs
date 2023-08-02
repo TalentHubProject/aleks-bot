@@ -20,6 +20,7 @@ using RemoraDiscordBot.Core.Responders.SelfResponder;
 using RemoraDiscordBot.Plugins.Experience;
 using RemoraDiscordBot.Plugins.Permission;
 using RemoraDiscordBot.Plugins.Welcomer;
+using RemoraDiscordBot.Plugins.WelcomerFeedbackExperience;
 
 namespace RemoraDiscordBot.Core;
 
@@ -55,6 +56,7 @@ public static class Setup
                 .AddAnyEventResponderLogging()
                 .AddDiscordBotInfrastructure()
                 .AddDiscordBotBusiness()
+                .AddWelcomerFeedbackExperiencePlugin()
             
                 .AddSelfResponder()
             ;
