@@ -38,11 +38,15 @@ public sealed class WelcomerFeedbackMessageResponder
         }
 
         var referencedMessage = gatewayEvent.ReferencedMessage.Value;
-
+        
+        if (!IsWelcomeMessage(referencedMessage))
+        {
+            return await Task.FromResult(Result.FromSuccess());
+        }
 
         if (referencedMessage?.Author.ID == null)
         {
-            return Result.FromError(new InvalidOperationError("Referenced message or author ID is null."));
+            return Result.FromError(new InvalidOperationError($"Referenced message ({referencedMessage.Content}) or author ID is null."));
         }
 
         if (!gatewayEvent.GuildID.HasValue)
@@ -51,11 +55,6 @@ public sealed class WelcomerFeedbackMessageResponder
         }
 
         var guildId = gatewayEvent.GuildID;
-
-        if (!IsWelcomeMessage(referencedMessage))
-        {
-            return Result.FromError(new InvalidOperationError("Message is not a welcome message."));
-        }
 
         _welcomerFeedbackService.AddUser(
             referencedMessage.Author.ID,
