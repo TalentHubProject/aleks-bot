@@ -42,7 +42,7 @@ public sealed class WelcomerFeedbackGuildMemberJoinResponder
 
         var feedbackMessage = await _channelApi.CreateMessageAsync(
             welcomer.WelcomeChannelId.Value.ToSnowflake(),
-            $"*{gatewayEvent.User.Value.Username} vient de rejoindre le serveur ! Répondez à ce message pour lui souhaiter la bienvenue et gagner de l'expérience.*",
+            $"*{gatewayEvent.User.Value.Username} vient de rejoindre le serveur ! Répondez à ce message pour lui souhaiter la bienvenue et gagner de l'expérience.* ✨",
             ct: ct);
         
         if (!feedbackMessage.IsSuccess)
