@@ -8,6 +8,7 @@ using Remora.Discord.API.Abstractions.Objects;
 using Remora.Discord.Commands.Feedback.Messages;
 using Remora.Discord.Commands.Feedback.Services;
 using Remora.Discord.Gateway.Responders;
+using Remora.Rest.Core;
 using Remora.Results;
 using RemoraDiscordBot.Plugins.WelcomerFeedbackExperience.Services;
 
@@ -39,7 +40,7 @@ public sealed class WelcomerFeedbackMessageResponder
 
         var referencedMessage = gatewayEvent.ReferencedMessage.Value;
         
-        if (!IsWelcomeMessage(referencedMessage))
+        if (referencedMessage != null && !IsWelcomeMessage(referencedMessage.ID))
         {
             return await Task.FromResult(Result.FromSuccess());
         }
@@ -73,8 +74,8 @@ public sealed class WelcomerFeedbackMessageResponder
         return Result.FromSuccess();
     }
 
-    private bool IsWelcomeMessage(IMessage message)
+    private bool IsWelcomeMessage(Snowflake messageId)
     {
-        return _welcomerFeedbackService.IsWelcomeMessage(message.ID);
+        return _welcomerFeedbackService.IsWelcomeMessage(message);
     }
 }
