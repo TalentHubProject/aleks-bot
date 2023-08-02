@@ -76,6 +76,6 @@ public sealed class WelcomerFeedbackMessageResponder
 
     private bool IsWelcomeMessage(Snowflake messageId)
     {
-        return _welcomerFeedbackService.IsWelcomeMessage(message);
+        return _welcomerFeedbackService.IsWelcomeMessage(messageId);
     }
 }
