@@ -39,6 +39,6 @@ public class MessageCreateGrantExperienceResponder
 
     private static int CalculateExperience(int messageLength, int wordCount)
     {
-        return (int) (Math.Pow(wordCount + messageLength, 2) / 1000);
+        return (int) (Math.Pow(wordCount + messageLength, 2) / 1000 * 1.05);
     }
 }
