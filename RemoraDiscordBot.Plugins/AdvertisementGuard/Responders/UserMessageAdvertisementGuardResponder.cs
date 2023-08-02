@@ -35,8 +35,8 @@ public class UserMessageAdvertisementGuardResponder
         {
             return Result.FromSuccess();
         }
-        
-        if (gatewayEvent.Member.Value.Permissions.Value.HasPermission(DiscordTextPermission.ManageMessages))
+
+        if (gatewayEvent.Member.Value.Permissions is {HasValue: true} && gatewayEvent.Member.Value.Permissions.Value.HasPermission(DiscordTextPermission.ManageMessages))
         {
             return Result.FromSuccess();
         }
