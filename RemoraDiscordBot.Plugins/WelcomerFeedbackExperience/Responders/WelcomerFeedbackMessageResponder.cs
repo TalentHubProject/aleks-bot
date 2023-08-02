@@ -5,6 +5,8 @@
 using Microsoft.Extensions.Logging;
 using Remora.Discord.API.Abstractions.Gateway.Events;
 using Remora.Discord.API.Abstractions.Objects;
+using Remora.Discord.Commands.Feedback.Messages;
+using Remora.Discord.Commands.Feedback.Services;
 using Remora.Discord.Gateway.Responders;
 using Remora.Results;
 using RemoraDiscordBot.Plugins.WelcomerFeedbackExperience.Services;
@@ -14,15 +16,18 @@ namespace RemoraDiscordBot.Plugins.WelcomerFeedbackExperience.Responders;
 public sealed class WelcomerFeedbackMessageResponder
     : IResponder<IMessageCreate>
 {
+    private readonly FeedbackService _feedbackService;
     private readonly ILogger<WelcomerFeedbackMessageResponder> _logger;
     private readonly IWelcomerFeedbackService _welcomerFeedbackService;
 
     public WelcomerFeedbackMessageResponder(
         ILogger<WelcomerFeedbackMessageResponder> logger,
-        IWelcomerFeedbackService welcomerFeedbackService)
+        IWelcomerFeedbackService welcomerFeedbackService,
+        FeedbackService feedbackService)
     {
         _logger = logger;
         _welcomerFeedbackService = welcomerFeedbackService;
+        _feedbackService = feedbackService;
     }
 
     public async Task<Result> RespondAsync(IMessageCreate gatewayEvent, CancellationToken ct = default)
@@ -58,6 +63,13 @@ public sealed class WelcomerFeedbackMessageResponder
             guildId.Value,
             referencedMessage.ChannelID,
             referencedMessage.Timestamp.DateTime);
+
+        await _feedbackService.SendContextualAsync(
+            "Merci de lui avoir souhaité la bienvenue, vous aidez à batir une communauté plus accueillante ! Et vous méritez ces quelques points d'expériences :) <3",
+            options: new FeedbackMessageOptions
+            {
+                MessageFlags = MessageFlags.Ephemeral
+            }, ct: ct);
 
         return Result.FromSuccess();
     }

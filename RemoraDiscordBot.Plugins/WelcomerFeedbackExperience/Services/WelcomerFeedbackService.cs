@@ -38,9 +38,15 @@ public sealed record WelcomerFeedbackService
     public void AddUser(Snowflake instigator, Snowflake responder, Snowflake guildId, Snowflake channelId, DateTime userJoinedAt)
     {
         var instigatorData = _welcomerFeedbackUsers.FirstOrDefault(x => x.Instigator == instigator);
-        if (instigatorData is not { CanBeWelcomed: true } || instigatorData.Responders.Contains(responder))
+        if (instigatorData.Responders.Contains(responder))
         {
             _logger.LogWarning("Instigator {Instigator} cannot be welcomed or Responder {Responder} has already responded", instigator, responder);
+            return;
+        }
+        
+        if (instigator == responder)
+        {
+            _logger.LogWarning("Instigator {Instigator} cannot be welcomed or Responder {Responder} is the instigator", instigator, responder);
             return;
         }
 
