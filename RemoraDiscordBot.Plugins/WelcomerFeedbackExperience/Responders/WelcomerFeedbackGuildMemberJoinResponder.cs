@@ -39,13 +39,10 @@ public sealed class WelcomerFeedbackGuildMemberJoinResponder
         if (welcomer.WelcomeChannelId is null)
             return Result.FromSuccess();
         
-        var userTag = gatewayEvent.User.HasValue
-            ? $"<@{gatewayEvent.User.Value.ID}>"
-            : throw new InvalidOperationException("Cannot get user ID from gateway event.");
 
         var feedbackMessage = await _channelApi.CreateMessageAsync(
             welcomer.WelcomeChannelId.Value.ToSnowflake(),
-            $"*{userTag} vient de rejoindre le serveur ! Répondez à ce message pour lui souhaiter la bienvenue et gagner de l'expérience.*",
+            $"*{gatewayEvent.User.Value.Username} vient de rejoindre le serveur ! Répondez à ce message pour lui souhaiter la bienvenue et gagner de l'expérience.*",
             ct: ct);
         
         if (!feedbackMessage.IsSuccess)
