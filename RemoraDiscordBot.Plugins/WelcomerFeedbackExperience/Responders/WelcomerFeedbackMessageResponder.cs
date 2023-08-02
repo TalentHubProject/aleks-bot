@@ -59,7 +59,7 @@ public sealed class WelcomerFeedbackMessageResponder
 
         _welcomerFeedbackService.AddUser(
             referencedMessage.Author.ID,
-            referencedMessage.Author.ID,
+            gatewayEvent.Author.ID,
             guildId.Value,
             referencedMessage.ChannelID,
             referencedMessage.Timestamp.DateTime);
