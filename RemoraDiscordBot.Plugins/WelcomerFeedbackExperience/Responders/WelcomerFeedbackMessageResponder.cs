@@ -28,13 +28,29 @@ public sealed class WelcomerFeedbackMessageResponder
     public async Task<Result> RespondAsync(IMessageCreate gatewayEvent, CancellationToken ct = default)
     {
         if (!gatewayEvent.ReferencedMessage.HasValue)
+        {
             return Result.FromError(new InvalidOperationError("No message referenced."));
+        }
 
         var referencedMessage = gatewayEvent.ReferencedMessage.Value;
+
+
+        if (referencedMessage?.Author.ID == null)
+        {
+            return Result.FromError(new InvalidOperationError("Referenced message or author ID is null."));
+        }
+
+        if (!gatewayEvent.GuildID.HasValue)
+        {
+            return Result.FromError(new InvalidOperationError("No guild ID provided."));
+        }
+
         var guildId = gatewayEvent.GuildID;
 
         if (!IsWelcomeMessage(referencedMessage))
+        {
             return Result.FromError(new InvalidOperationError("Message is not a welcome message."));
+        }
 
         _welcomerFeedbackService.AddUser(
             referencedMessage.Author.ID,
@@ -50,5 +66,4 @@ public sealed class WelcomerFeedbackMessageResponder
     {
         return _welcomerFeedbackService.IsWelcomeMessage(message.ID);
     }
-
 }
