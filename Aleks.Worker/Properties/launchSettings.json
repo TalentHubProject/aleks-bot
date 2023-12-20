@@ -1,6 +1,6 @@
 ﻿{
   "profiles": {
-    "RemoraDiscordBot.Worker": {
+    "Aleks.Worker": {
       "commandName": "Project",
       "dotnetRunMessages": true,
       "environmentVariables": {

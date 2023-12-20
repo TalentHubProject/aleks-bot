@@ -9,7 +9,7 @@ using Remora.Discord.API.Objects;
 using Remora.Discord.Commands.Feedback.Services;
 using Remora.Results;
 
-namespace RemoraDiscordBot.Core.CommandGroups;
+namespace Aleks.Bot.CommandGroups;
 
 /// <summary>
 ///     A command group for the credit command.

@@ -1,27 +1,28 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.30114.105
+# Visual Studio Version 17
+VisualStudioVersion = 17.9.34407.89
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aleks.Bot", "Aleks.Bot\Aleks.Bot.csproj", "{11E028CF-69D3-4FB9-A00E-42BFA573BB77}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aleks.Bot", "Aleks.Bot\Aleks.Bot.csproj", "{11E028CF-69D3-4FB9-A00E-42BFA573BB77}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aleks.Worker", "Aleks.Worker\Aleks.Worker.csproj", "{8EBB2ED1-E959-4A02-AF82-08DADFBFE77C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aleks.Worker", "Aleks.Worker\Aleks.Worker.csproj", "{8EBB2ED1-E959-4A02-AF82-08DADFBFE77C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aleks.Data", "Aleks.Data\Aleks.Data.csproj", "{E35D8CD6-8A29-4DAF-B596-1BA5E65B20B0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aleks.Data", "Aleks.Data\Aleks.Data.csproj", "{E35D8CD6-8A29-4DAF-B596-1BA5E65B20B0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aleks.Data.Domain", "Aleks.Data.Domain\Aleks.Data.Domain.csproj", "{A64C19A6-13C3-459F-B75E-AF291FF0A215}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aleks.Data.Domain", "Aleks.Data.Domain\Aleks.Data.Domain.csproj", "{A64C19A6-13C3-459F-B75E-AF291FF0A215}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aleks.Business", "Aleks.Business\Aleks.Business.csproj", "{7B728E7A-1502-480F-981A-8A52740968E4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aleks.Business", "Aleks.Business\Aleks.Business.csproj", "{7B728E7A-1502-480F-981A-8A52740968E4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aleks.Plugins", "Aleks.Plugins\Aleks.Plugins.csproj", "{F1796FEF-09EB-4122-83AB-1C940DE68261}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aleks.Plugins", "Aleks.Plugins\Aleks.Plugins.csproj", "{F1796FEF-09EB-4122-83AB-1C940DE68261}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aleks.AppHost", "Aleks.AppHost\Aleks.AppHost.csproj", "{122480DB-F682-4417-B654-EE8F97CA882B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aleks.ServiceDefaults", "Aleks.ServiceDefaults\Aleks.ServiceDefaults.csproj", "{58FAE7DC-9D7F-43C9-9FA3-3E276A7F983F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
-	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{11E028CF-69D3-4FB9-A00E-42BFA573BB77}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -48,5 +49,16 @@ Global
 		{F1796FEF-09EB-4122-83AB-1C940DE68261}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F1796FEF-09EB-4122-83AB-1C940DE68261}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F1796FEF-09EB-4122-83AB-1C940DE68261}.Release|Any CPU.Build.0 = Release|Any CPU
+		{122480DB-F682-4417-B654-EE8F97CA882B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{122480DB-F682-4417-B654-EE8F97CA882B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{122480DB-F682-4417-B654-EE8F97CA882B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{122480DB-F682-4417-B654-EE8F97CA882B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{58FAE7DC-9D7F-43C9-9FA3-3E276A7F983F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{58FAE7DC-9D7F-43C9-9FA3-3E276A7F983F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{58FAE7DC-9D7F-43C9-9FA3-3E276A7F983F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{58FAE7DC-9D7F-43C9-9FA3-3E276A7F983F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
 	EndGlobalSection
 EndGlobal

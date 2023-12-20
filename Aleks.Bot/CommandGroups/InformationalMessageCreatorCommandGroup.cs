@@ -15,7 +15,7 @@ using Remora.Discord.Commands.Extensions;
 using Remora.Results;
 using Aleks.Business.Colors;
 
-namespace RemoraDiscordBot.Core.CommandGroups;
+namespace Aleks.Bot.CommandGroups;
 
 /// <summary>
 ///     A command group for the informational message creator command.

@@ -4,7 +4,7 @@
         <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <RootNamespace>RemoraDiscordBot.Core</RootNamespace>
+        <RootNamespace>Aleks.Bot</RootNamespace>
         <UserSecretsId>e10541ca-9593-4c6c-9569-5cda8eb29472</UserSecretsId>
     </PropertyGroup>
 

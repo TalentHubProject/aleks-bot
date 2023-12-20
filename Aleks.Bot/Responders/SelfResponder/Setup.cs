@@ -5,7 +5,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Remora.Discord.Gateway.Extensions;
 
-namespace RemoraDiscordBot.Core.Responders.SelfResponder;
+namespace Aleks.Bot.Responders.SelfResponder;
 
 public static class Setup
 {

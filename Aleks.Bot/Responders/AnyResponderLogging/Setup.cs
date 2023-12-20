@@ -4,8 +4,9 @@
 
 using Microsoft.Extensions.DependencyInjection;
 using Remora.Discord.Gateway.Extensions;
+using Aleks.Bot.Responders.AnyResponderLogging;
 
-namespace RemoraDiscordBot.Core.Responders.AnyResponderLogging;
+namespace Aleks.Bot.Responders.AnyResponderLogging;
 
 public static class Setup
 {

@@ -15,7 +15,7 @@ using Remora.Discord.API.Abstractions.Gateway.Events;
 using Remora.Discord.Caching.Extensions;
 using Remora.Discord.Caching.Services;
 using Remora.Discord.Hosting.Extensions;
-using RemoraDiscordBot.Core;
+using Aleks.Bot;
 
 var host = Host.CreateDefaultBuilder(args)
     .ConfigureServices((hostContext, services) =>

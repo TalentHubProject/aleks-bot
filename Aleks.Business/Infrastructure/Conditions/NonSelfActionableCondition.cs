@@ -8,7 +8,7 @@ using Remora.Discord.API.Abstractions.Objects;
 using Remora.Discord.API.Abstractions.Rest;
 using Remora.Discord.Commands.Contexts;
 using Remora.Results;
-using RemoraDiscordBot.Core.Infrastructure.Errors;
+using Aleks.Bot.Infrastructure.Errors;
 
 namespace Aleks.Business.Attributes;
 

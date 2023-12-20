@@ -7,7 +7,7 @@ using Remora.Discord.API.Abstractions.Gateway.Events;
 using Remora.Discord.Gateway.Responders;
 using Remora.Results;
 
-namespace RemoraDiscordBot.Core.Responders.AnyResponderLogging;
+namespace Aleks.Bot.Responders.AnyResponderLogging;
 
 /// <summary>
 ///     The responder that logs any event received.

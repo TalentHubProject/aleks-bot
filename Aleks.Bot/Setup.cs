@@ -12,17 +12,17 @@ using Remora.Discord.Gateway.Extensions;
 using Remora.Discord.Interactivity;
 using Remora.Discord.Interactivity.Extensions;
 using Aleks.Business;
-using RemoraDiscordBot.Core.CommandGroups;
-using RemoraDiscordBot.Core.Exceptions;
-using RemoraDiscordBot.Core.Infrastructure;
-using RemoraDiscordBot.Core.Responders.AnyResponderLogging;
-using RemoraDiscordBot.Core.Responders.SelfResponder;
+using Aleks.Bot.CommandGroups;
+using Aleks.Bot.Exceptions;
+using Aleks.Bot.Infrastructure;
+using Aleks.Bot.Responders.AnyResponderLogging;
+using Aleks.Bot.Responders.SelfResponder;
 using Aleks.Plugins.Experience;
 using Aleks.Plugins.Permission;
 using Aleks.Plugins.Welcomer;
 using Aleks.Plugins.WelcomerFeedbackExperience;
 
-namespace RemoraDiscordBot.Core;
+namespace Aleks.Bot;
 
 public static class Setup
 {

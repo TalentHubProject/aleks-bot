@@ -5,7 +5,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Remora.Commands.Extensions;
 
-namespace RemoraDiscordBot.Core.CommandGroups;
+namespace Aleks.Bot.CommandGroups;
 
 /// <summary>
 ///     The extension methods for the <see cref="IServiceCollection" /> interface.

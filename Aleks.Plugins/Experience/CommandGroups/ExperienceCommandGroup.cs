@@ -20,7 +20,7 @@ using Aleks.Business.Colors;
 using Aleks.Business.Extensions;
 using Aleks.Business.Infrastructure.Attributes;
 using Aleks.Plugins.Experience.Queries;
-using RemoraDiscordBot.Core.Infrastructure.Errors;
+using Aleks.Bot.Infrastructure.Errors;
 
 namespace Aleks.Plugins.Experience.CommandGroups;
 

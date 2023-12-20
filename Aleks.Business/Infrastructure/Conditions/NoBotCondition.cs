@@ -6,7 +6,7 @@ using Aleks.Business.Infrastructure.Attributes;
 using Remora.Commands.Conditions;
 using Remora.Discord.API.Abstractions.Objects;
 using Remora.Results;
-using RemoraDiscordBot.Core.Infrastructure.Errors;
+using Aleks.Bot.Infrastructure.Errors;
 
 namespace Aleks.Business.Attributes;
 

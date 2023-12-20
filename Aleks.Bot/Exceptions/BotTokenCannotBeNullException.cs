@@ -4,7 +4,7 @@
 
 using System.Runtime.Serialization;
 
-namespace RemoraDiscordBot.Core.Exceptions;
+namespace Aleks.Bot.Exceptions;
 
 /// <summary>
 ///    The exception that is thrown when the bot token is null.

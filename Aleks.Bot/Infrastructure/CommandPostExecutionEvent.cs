@@ -7,7 +7,7 @@ using Remora.Discord.Commands.Contexts;
 using Remora.Discord.Commands.Services;
 using Remora.Results;
 
-namespace RemoraDiscordBot.Core.Infrastructure;
+namespace Aleks.Bot.Infrastructure;
 
 /// <summary>
 ///     The event that is called after the execution of a command.

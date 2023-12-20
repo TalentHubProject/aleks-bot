@@ -4,7 +4,7 @@
         <TargetFramework>net8.0</TargetFramework>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
-        <UserSecretsId>dotnet-RemoraDiscordBot.Worker-191E125E-59DF-44F9-8DEF-F062E4357F6C</UserSecretsId>
+        <UserSecretsId>dotnet-Aleks.Worker-191E125E-59DF-44F9-8DEF-F062E4357F6C</UserSecretsId>
         <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     </PropertyGroup>
 
@@ -32,8 +32,9 @@
     <ItemGroup>
         <ProjectReference Include="..\Aleks.Bot\Aleks.Bot.csproj" />
         <ProjectReference Include="..\Aleks.Data\Aleks.Data.csproj" />
-        <ProjectReference Include="..\RemoraDiscordBot.Bot\RemoraDiscordBot.Bot.csproj" />
-        <ProjectReference Include="..\RemoraDiscordBot.ServiceDefaults\RemoraDiscordBot.ServiceDefaults.csproj" />
+        <ProjectReference Include="..\Aleks.ServiceDefaults\Aleks.ServiceDefaults.csproj" />
+        <ProjectReference Include="..\Aleks.Bot\Aleks.Bot.csproj" />
+        <ProjectReference Include="..\Aleks.ServiceDefaults\Aleks.ServiceDefaults.csproj" />
     </ItemGroup>
 
     <ItemGroup>

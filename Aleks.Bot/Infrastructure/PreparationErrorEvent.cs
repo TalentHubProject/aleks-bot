@@ -11,7 +11,7 @@ using Remora.Discord.Commands.Feedback.Services;
 using Remora.Discord.Commands.Services;
 using Remora.Results;
 
-namespace RemoraDiscordBot.Core.Infrastructure;
+namespace Aleks.Bot.Infrastructure;
 
 /// <summary>
 ///     A preparation error event.

@@ -4,7 +4,7 @@
 
 using Remora.Results;
 
-namespace RemoraDiscordBot.Core.Infrastructure.Errors;
+namespace Aleks.Bot.Infrastructure.Errors;
 
 public sealed record NonSelfActionableError(string Message)
     : ResultError(Message);

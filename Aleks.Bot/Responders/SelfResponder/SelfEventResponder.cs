@@ -9,7 +9,7 @@ using Remora.Discord.Gateway.Responders;
 using Remora.Results;
 using Aleks.Business.Colors;
 
-namespace RemoraDiscordBot.Core.Responders.SelfResponder;
+namespace Aleks.Bot.Responders.SelfResponder;
 
 /// <summary>
 ///    The responder that responds to self mentions.
