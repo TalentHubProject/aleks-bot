@@ -40,3 +40,6 @@ msbuild.wrn
 .nuget
 .dotnet
 .local
+
+# Docker Compose mysql data
+mysql/
