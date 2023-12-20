@@ -22,6 +22,7 @@ public class StaticStarboardOnEnoughStarsGotResponder(
     IDiscordRestChannelAPI channelApi)
     : IResponder<IMessageReactionAdd>
 {
+    /// <inheritdoc />
     public async Task<Result> RespondAsync(IMessageReactionAdd gatewayEvent, CancellationToken ct = default)
     {
         if (!gatewayEvent.Emoji.Name.Equals(StaticStarboardDiscordService.StarEmoji))
