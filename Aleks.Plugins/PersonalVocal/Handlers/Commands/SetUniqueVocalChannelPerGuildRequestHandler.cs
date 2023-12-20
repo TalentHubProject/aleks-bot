@@ -1,0 +1,44 @@
+﻿// Copyright (c) Alexis Chân Gridel. All Rights Reserved.
+// Licensed under the GNU General Public License v3.0.
+// See the LICENSE file in the project root for more information.
+
+using MediatR;
+using Microsoft.EntityFrameworkCore;
+using Aleks.Business.Extensions;
+using Aleks.Data;
+using Aleks.Plugins.PersonalVocal.Commands;
+
+namespace Aleks.Plugins.PersonalVocal.Handlers.Commands;
+
+public sealed class SetUniqueVocalChannelPerGuildRequestHandler
+    : AsyncRequestHandler<SetUniqueVocalChannelPerGuildRequest>
+{
+    private readonly AleksDbContext _dbContext;
+
+    public SetUniqueVocalChannelPerGuildRequestHandler(
+        AleksDbContext dbContext)
+    {
+        _dbContext = dbContext;
+    }
+
+    protected override async Task Handle(
+        SetUniqueVocalChannelPerGuildRequest request,
+        CancellationToken cancellationToken)
+    {
+        var personalVocal = await _dbContext.PersonalVocals
+            .FirstOrDefaultAsync(
+                x => x.GuildId == request.GuildId.ToLong(),
+                cancellationToken) ?? new Aleks.Data.Domain.PersonalVocal.PersonalVocal
+        {
+            GuildId = request.GuildId.ToLong(),
+            ChannelId = request.ChannelId.ToLong(),
+            CategoryId = request.CategoryId.ToLong()
+        };
+        
+        personalVocal.ChannelId = request.ChannelId.ToLong();
+
+        _dbContext.AddOrUpdate(personalVocal);
+
+        await _dbContext.SaveChangesAsync(cancellationToken);
+    }
+}

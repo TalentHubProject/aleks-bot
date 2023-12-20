@@ -1,0 +1,42 @@
+// Copyright (c) Alexis Chân Gridel. All Rights Reserved.
+// Licensed under the GNU General Public License v3.0.
+// See the LICENSE file in the project root for more information.
+
+using Aleks.Business.Infrastructure.Attributes;
+using Remora.Commands.Conditions;
+using Remora.Discord.API.Abstractions.Objects;
+using Remora.Discord.API.Abstractions.Rest;
+using Remora.Discord.Commands.Contexts;
+using Remora.Results;
+using RemoraDiscordBot.Core.Infrastructure.Errors;
+
+namespace Aleks.Business.Attributes;
+
+public class NonSelfActionableCondition
+    : ICondition<NonSelfActionableAttribute, IUser>
+{
+    private readonly ICommandContext _commandContext;
+
+    public NonSelfActionableCondition(
+        ICommandContext commandContext)
+    {
+        _commandContext = commandContext;
+    }
+
+    // https://github.com/VelvetThePanda 
+    // This code belongs to Velvet, I just adapted it to my needs.
+    // It comes from the Velvet's Discord Bot Silk project.
+    public async ValueTask<Result> CheckAsync(NonSelfActionableAttribute attribute, IUser data, CancellationToken ct = default)
+    {
+        var user = _commandContext switch
+        {
+            IInteractionContext interactionContext => interactionContext.Interaction.User.Value,
+            ITextCommandContext textCommandContext => textCommandContext.Message.Author.Value,
+            _ => throw new InvalidOperationException(),
+        };
+
+        return user.ID == data.ID
+            ? Result.FromError(new NonSelfActionableError("You can't do this to yourself."))
+            : Result.FromSuccess();
+    }
+}

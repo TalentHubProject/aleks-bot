@@ -8,3 +8,26 @@ services:
     working_dir: /app
     env_file:
       - .env
+    networks:
+        - aleks-bot-net
+    depends_on:
+        - mysql
+  
+  mysql:
+    image: mysql:8.0.26
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: aleks_bot
+      MYSQL_USER: aleks_bot
+      MYSQL_PASSWORD: aleks_bot
+    volumes:
+      - ./mysql:/var/lib/mysql
+    networks:
+        - aleks-bot-net
+    
+    
+networks:
+  aleks-bot-net:
+    driver: bridge
