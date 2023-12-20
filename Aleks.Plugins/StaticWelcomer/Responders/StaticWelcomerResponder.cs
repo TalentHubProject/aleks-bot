@@ -1,4 +1,5 @@
 ﻿using Aleks.Business.Colors;
+using Aleks.Business.Extensions;
 using Microsoft.Extensions.Configuration;
 using Remora.Discord.API.Abstractions.Gateway.Events;
 using Remora.Discord.API.Abstractions.Rest;
@@ -26,7 +27,7 @@ public class StaticWelcomerResponder(
         var embed = new Embed
         {
             Colour = DiscordTransparentColor.Value,
-            Description = "Welcome to the server!",
+            Description = $"{gatewayEvent.User.Value.ID.ToMention()} vient de rejoindre le serveur !",
         };
 
         var channelIdSnowflake = Snowflake.TryParse(channelId, out var snowflake)
