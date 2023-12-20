@@ -5,6 +5,7 @@ using Aleks.Bot.Responders.SelfResponder;
 using Aleks.Business;
 using Aleks.Plugins.Experience;
 using Aleks.Plugins.Permission;
+using Aleks.Plugins.StaticStarboard;
 using Aleks.Plugins.StaticWelcomer;
 using Microsoft.Extensions.DependencyInjection;
 using Remora.Discord.API.Abstractions.Gateway.Commands;
@@ -50,6 +51,7 @@ public static class Setup
                 .AddDiscordBotBusiness()
                 .AddSelfResponder()
                 .AddStaticWelcomerPlugin()
+                .AddStaticStarboardPlugin()
             ;
     }
 }
