@@ -1,5 +1,12 @@
+using Projects;
+
 var builder = DistributedApplication.CreateBuilder(args);
 
-builder.AddProject<Projects.Aleks_Worker>("aleks.worker");
+var mysql = builder.AddSqlServerContainer("mysql");
+
+var aleksDb = mysql.AddDatabase("aleks");
+
+builder.AddProject<Aleks_Worker>("aleks.worker")
+    .WithReference(aleksDb);
 
 builder.Build().Run();
