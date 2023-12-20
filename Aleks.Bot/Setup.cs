@@ -2,25 +2,21 @@
 // Licensed under the GNU General Public License v3.0.
 // See the LICENSE file in the project root for more information.
 
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Remora.Discord.API.Abstractions.Gateway.Commands;
-using Remora.Discord.Commands.Extensions;
-using Remora.Discord.Commands.Responders;
-using Remora.Discord.Gateway;
-using Remora.Discord.Gateway.Extensions;
-using Remora.Discord.Interactivity;
-using Remora.Discord.Interactivity.Extensions;
-using Aleks.Business;
 using Aleks.Bot.CommandGroups;
-using Aleks.Bot.Exceptions;
 using Aleks.Bot.Infrastructure;
 using Aleks.Bot.Responders.AnyResponderLogging;
 using Aleks.Bot.Responders.SelfResponder;
+using Aleks.Business;
 using Aleks.Plugins.Experience;
 using Aleks.Plugins.Permission;
 using Aleks.Plugins.Welcomer;
 using Aleks.Plugins.WelcomerFeedbackExperience;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Remora.Discord.API.Abstractions.Gateway.Commands;
+using Remora.Discord.Commands.Extensions;
+using Remora.Discord.Gateway;
+using Remora.Discord.Interactivity.Extensions;
 
 namespace Aleks.Bot;
 
@@ -30,9 +26,6 @@ public static class Setup
         this IServiceCollection serviceCollection,
         IConfiguration configuration)
     {
-        var botToken = configuration["Discord:BotToken"]
-                       ?? throw new BotTokenCannotBeNullException();
-
         return serviceCollection
                 .Configure<DiscordGatewayClientOptions>(options =>
                 {
@@ -46,7 +39,6 @@ public static class Setup
                                       | GatewayIntents.GuildVoiceStates;
                 })
                 .AddInteractivity()
-                
                 .AddDiscordCommands(true)
                 .AddDiscordBotCoreCommands()
                 .AddExperiencePlugin()
@@ -56,7 +48,6 @@ public static class Setup
                 .AddDiscordBotInfrastructure()
                 .AddDiscordBotBusiness()
                 .AddWelcomerFeedbackExperiencePlugin()
-            
                 .AddSelfResponder()
             ;
     }

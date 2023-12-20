@@ -2,6 +2,7 @@
 // Licensed under the GNU General Public License v3.0.
 // See the LICENSE file in the project root for more information.
 
+using Aleks.Bot;
 using Aleks.Data;
 using Aleks.Plugins.AdvertisementGuard;
 using Aleks.Plugins.AutoRoles;
@@ -15,7 +16,6 @@ using Remora.Discord.API.Abstractions.Gateway.Events;
 using Remora.Discord.Caching.Extensions;
 using Remora.Discord.Caching.Services;
 using Remora.Discord.Hosting.Extensions;
-using Aleks.Bot;
 
 var host = Host.CreateDefaultBuilder(args)
     .ConfigureServices((hostContext, services) =>
@@ -25,7 +25,7 @@ var host = Host.CreateDefaultBuilder(args)
             {
                 var configuration = discordService.GetRequiredService<IConfiguration>();
 
-                return configuration.GetValue<string?>("Discord:Token") ??
+                return configuration.GetValue<string?>("BotToken") ??
                        throw new InvalidOperationException("Discord:Token is not configured.");
             })
             .AddHostedService<Worker>()
