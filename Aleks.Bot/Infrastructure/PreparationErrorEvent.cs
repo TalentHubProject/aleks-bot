@@ -1,7 +1,3 @@
-// Copyright (c) Alexis Chân Gridel. All Rights Reserved.
-// Licensed under the GNU General Public License v3.0.
-// See the LICENSE file in the project root for more information.
-
 using Microsoft.Extensions.Logging;
 using Remora.Discord.API.Abstractions.Objects;
 using Remora.Discord.Commands.Contexts;
@@ -16,20 +12,11 @@ namespace Aleks.Bot.Infrastructure;
 /// <summary>
 ///     A preparation error event.
 /// </summary>
-public class PreparationErrorEvent
+public class PreparationErrorEvent(
+    ILogger<PreparationErrorEvent> logger,
+    FeedbackService feedbackService)
     : IPreparationErrorEvent
 {
-    private readonly FeedbackService _feedbackService;
-    private readonly ILogger<PreparationErrorEvent> _logger;
-
-    public PreparationErrorEvent(
-        ILogger<PreparationErrorEvent> logger,
-        FeedbackService feedbackService)
-    {
-        _logger = logger;
-        _feedbackService = feedbackService;
-    }
-
     /// <summary>
     ///     The event that is called when a command preparation fails.
     /// </summary>
@@ -42,10 +29,17 @@ public class PreparationErrorEvent
         IResult preparationResult,
         CancellationToken ct = default)
     {
-        if (preparationResult.IsSuccess) return Result.FromSuccess();
-        if (!context.TryGetUserID(out var userId)) return Result.FromSuccess();
+        if (preparationResult.IsSuccess)
+        {
+            return Result.FromSuccess();
+        }
 
-        return (Result) await _feedbackService.SendContextualErrorAsync(
+        if (!context.TryGetUserID(out var userId))
+        {
+            return Result.FromSuccess();
+        }
+
+        return (Result)await feedbackService.SendContextualErrorAsync(
             preparationResult.Inner?.Inner?.Error?.Message,
             userId.Value,
             new FeedbackMessageOptions

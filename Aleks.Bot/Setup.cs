@@ -1,8 +1,4 @@
-﻿// Copyright (c) Alexis Chân Gridel. All Rights Reserved.
-// Licensed under the GNU General Public License v3.0.
-// See the LICENSE file in the project root for more information.
-
-using Aleks.Bot.CommandGroups;
+﻿using Aleks.Bot.CommandGroups;
 using Aleks.Bot.Infrastructure;
 using Aleks.Bot.Responders.AnyResponderLogging;
 using Aleks.Bot.Responders.SelfResponder;
@@ -11,7 +7,6 @@ using Aleks.Plugins.Experience;
 using Aleks.Plugins.Permission;
 using Aleks.Plugins.Welcomer;
 using Aleks.Plugins.WelcomerFeedbackExperience;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Remora.Discord.API.Abstractions.Gateway.Commands;
 using Remora.Discord.Commands.Extensions;
@@ -20,11 +15,18 @@ using Remora.Discord.Interactivity.Extensions;
 
 namespace Aleks.Bot;
 
+/// <summary>
+///     Setup for the Discord bot.
+/// </summary>
 public static class Setup
 {
+    /// <summary>
+    ///     Adds the Discord bot to the service collection. It includes the default plugins.
+    /// </summary>
+    /// <param name="serviceCollection">service collection</param>
+    /// <returns>The builder.</returns>
     public static IServiceCollection AddDiscordBot(
-        this IServiceCollection serviceCollection,
-        IConfiguration configuration)
+        this IServiceCollection serviceCollection)
     {
         return serviceCollection
                 .Configure<DiscordGatewayClientOptions>(options =>

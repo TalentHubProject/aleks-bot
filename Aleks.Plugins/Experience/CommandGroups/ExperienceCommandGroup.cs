@@ -1,8 +1,8 @@
-// Copyright (c) Alexis Chân Gridel. All Rights Reserved.
-// Licensed under the GNU General Public License v3.0.
-// See the LICENSE file in the project root for more information.
-
 using System.ComponentModel;
+using Aleks.Business.Colors;
+using Aleks.Business.Extensions;
+using Aleks.Business.Infrastructure.Attributes;
+using Aleks.Plugins.Experience.Queries;
 using MediatR;
 using OneOf;
 using Remora.Commands.Attributes;
@@ -16,56 +16,49 @@ using Remora.Discord.Commands.Extensions;
 using Remora.Discord.Commands.Feedback.Messages;
 using Remora.Discord.Commands.Feedback.Services;
 using Remora.Results;
-using Aleks.Business.Colors;
-using Aleks.Business.Extensions;
-using Aleks.Business.Infrastructure.Attributes;
-using Aleks.Plugins.Experience.Queries;
-using Aleks.Bot.Infrastructure.Errors;
 
 namespace Aleks.Plugins.Experience.CommandGroups;
 
+/// <summary>
+///     The experience command group.
+/// </summary>
+/// <param name="commandContext">The injected command context.</param>
+/// <param name="mediator">The injected mediator.</param>
+/// <param name="userApi">The injected user API.</param>
+/// <param name="feedbackService">The injected feedback service.</param>
 [Group("experience")]
 [Description("Plugin to manage the experience feature.")]
-public class ExperienceCommandGroup
+public class ExperienceCommandGroup(
+    ICommandContext commandContext,
+    IMediator mediator,
+    IDiscordRestUserAPI userApi,
+    FeedbackService feedbackService)
     : CommandGroup
 {
-    private readonly ICommandContext _commandContext;
-    private readonly FeedbackService _feedbackService;
-    private readonly IMediator _mediator;
-    private readonly IDiscordRestUserAPI _userApi;
-
-    public ExperienceCommandGroup(
-        ICommandContext commandContext,
-        IMediator mediator,
-        IDiscordRestUserAPI userApi,
-        FeedbackService feedbackService)
-    {
-        _commandContext = commandContext;
-        _mediator = mediator;
-        _userApi = userApi;
-        _feedbackService = feedbackService;
-    }
-
     [Command("amount")]
     [Description("Gets the amount of XP you have or the passed user has.")]
     public async Task<IResult> XpCommandAsync(
         [Description("Argument user to get the experience amount from")] [NoBot]
         IUser? user = null)
     {
-        if (!_commandContext.TryGetUserID(out var instigatorId))
+        if (!commandContext.TryGetUserID(out var instigatorId))
+        {
             throw new InvalidOperationException("Could not get the user ID.");
+        }
 
-        if (!_commandContext.TryGetGuildID(out var instigatorGuildId))
+        if (!commandContext.TryGetGuildID(out var instigatorGuildId))
+        {
             throw new InvalidOperationException("Could not get the guild ID.");
+        }
 
         var userToCheck = user?.ID ?? instigatorId;
-        var xp = await _mediator.Send(
+        var xp = await mediator.Send(
             new GetExperienceAmountByUserQuery(userToCheck.Value, instigatorGuildId.Value),
             CancellationToken);
 
-        var instigatorUser = await _userApi.GetUserAsync(instigatorId.Value, CancellationToken);
+        var instigatorUser = await userApi.GetUserAsync(instigatorId.Value, CancellationToken);
 
-        await _feedbackService.SendContextualEmbedAsync(
+        await feedbackService.SendContextualEmbedAsync(
             new Embed
             {
                 Title = $"Experience for {user?.Username ?? instigatorUser.Entity.Username}",
@@ -83,27 +76,31 @@ public class ExperienceCommandGroup
         [Description("Argument user to get the experience amount from")] [NoBot]
         IUser? user = null)
     {
-        if (!_commandContext.TryGetUserID(out var instigatorId))
+        if (!commandContext.TryGetUserID(out var instigatorId))
+        {
             throw new InvalidOperationException("Could not get the user ID.");
+        }
 
-        if (!_commandContext.TryGetGuildID(out var instigatorGuildId))
+        if (!commandContext.TryGetGuildID(out var instigatorGuildId))
+        {
             throw new InvalidOperationException("Could not get the guild ID.");
+        }
 
         var userToCheck = user?.ID ?? instigatorId;
-        var xp = await _mediator.Send(
+        var xp = await mediator.Send(
             new GetExperienceAmountByUserQuery(userToCheck.Value, instigatorGuildId.Value),
             CancellationToken);
-        var level = await _mediator.Send(
+        var level = await mediator.Send(
             new GetLevelByUserQuery(userToCheck.Value, instigatorGuildId.Value));
-        var xpNeeded = await _mediator.Send(
+        var xpNeeded = await mediator.Send(
             new GetExperienceNeededByUserQuery(userToCheck.Value, instigatorGuildId.Value));
 
-        var instigatorUser = await _userApi.GetUserAsync(instigatorId.Value, CancellationToken);
+        var instigatorUser = await userApi.GetUserAsync(instigatorId.Value, CancellationToken);
 
-        var data = await _mediator.Send(new GetCreatureOrEggByUserQuery(userToCheck.Value, instigatorGuildId.Value));
+        var data = await mediator.Send(new GetCreatureOrEggByUserQuery(userToCheck.Value, instigatorGuildId.Value));
 
 
-        return (Result) await _feedbackService.SendContextualEmbedAsync(
+        return (Result)await feedbackService.SendContextualEmbedAsync(
             new Embed
             {
                 Title = $"Profile for {user?.Username ?? instigatorUser.Entity.Username}",

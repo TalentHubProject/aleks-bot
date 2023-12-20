@@ -1,13 +1,18 @@
-﻿// Copyright (c) Alexis Chân Gridel. All Rights Reserved.
-// Licensed under the GNU General Public License v3.0.
-// See the LICENSE file in the project root for more information.
-
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace Aleks.Business.Extensions;
 
+/// <summary>
+///     The extension methods for the <see cref="DbContext" /> interface.
+/// </summary>
 public static class AddOrUpdateExtension
 {
+    /// <summary>
+    ///     Adds or updates the entity.
+    /// </summary>
+    /// <param name="ctx">DbContext instance.</param>
+    /// <param name="entity">The entity.</param>
+    /// <exception cref="ArgumentOutOfRangeException">The entity state is not supported.</exception>
     public static void AddOrUpdate(this DbContext ctx, object entity)
     {
         var entry = ctx.Entry(entity);

@@ -36,7 +36,7 @@ var host = Host.CreateDefaultBuilder(args)
                         hostContext.Configuration["ConnectionStrings:DefaultConnection"],
                         ServerVersion.AutoDetect(hostContext.Configuration["ConnectionStrings:DefaultConnection"]));
             })
-            .AddDiscordBot(hostContext.Configuration)
+            .AddDiscordBot()
             .Configure<CacheSettings>(cacheSettings =>
             {
                 cacheSettings.SetSlidingExpiration<IVoiceStateUpdate>(null);

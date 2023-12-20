@@ -1,8 +1,4 @@
-﻿// Copyright (c) Alexis Chân Gridel. All Rights Reserved.
-// Licensed under the GNU General Public License v3.0.
-// See the LICENSE file in the project root for more information.
-
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 using Remora.Discord.API.Abstractions.Gateway.Events;
 using Remora.Discord.API.Abstractions.Objects;
 using Remora.Discord.API.Abstractions.Rest;
@@ -12,31 +8,28 @@ using Remora.Results;
 
 namespace Aleks.Plugins.AdvertisementGuard.Responders;
 
-public class UserMessageAdvertisementGuardResponder
+/// <summary>
+///     The responder to delete messages containing discord invites.
+/// </summary>
+/// <param name="channelApi">The injected discord rest channel API.</param>
+/// <param name="feedbackService">The injected feedback service.</param>
+public partial class UserMessageAdvertisementGuardResponder(
+    IDiscordRestChannelAPI channelApi,
+    FeedbackService feedbackService)
     : IResponder<IMessageCreate>
 {
     private const string DISCORD_INVITE_REGEX =
         @"(https?:\/\/)?(www\.)?(discord\.(gg|io|me|li)|discordapp\.com\/invite)\/.+[a-z]";
 
-    private readonly IDiscordRestChannelAPI _channelApi;
-    private readonly FeedbackService _feedbackService;
-
-    public UserMessageAdvertisementGuardResponder(
-        IDiscordRestChannelAPI channelApi,
-        FeedbackService feedbackService)
-    {
-        _channelApi = channelApi;
-        _feedbackService = feedbackService;
-    }
-
     public async Task<Result> RespondAsync(IMessageCreate gatewayEvent, CancellationToken ct = default)
     {
-        if (gatewayEvent.Author.IsBot is {HasValue: true, Value: true})
+        if (gatewayEvent.Author.IsBot is { HasValue: true, Value: true })
         {
             return Result.FromSuccess();
         }
 
-        if (gatewayEvent.Member.Value.Permissions is {HasValue: true} && gatewayEvent.Member.Value.Permissions.Value.HasPermission(DiscordTextPermission.ManageMessages))
+        if (gatewayEvent.Member.Value.Permissions is { HasValue: true } &&
+            gatewayEvent.Member.Value.Permissions.Value.HasPermission(DiscordTextPermission.ManageMessages))
         {
             return Result.FromSuccess();
         }
@@ -47,18 +40,21 @@ public class UserMessageAdvertisementGuardResponder
             return Result.FromSuccess();
         }
 
-        var match = Regex.Match(message, DISCORD_INVITE_REGEX, RegexOptions.IgnoreCase);
+        var match = MyRegex().Match(message);
         if (!match.Success)
         {
             return Result.FromSuccess();
         }
 
-        await _channelApi.DeleteMessageAsync(gatewayEvent.ChannelID, gatewayEvent.ID, ct: ct);
+        await channelApi.DeleteMessageAsync(gatewayEvent.ChannelID, gatewayEvent.ID, ct: ct);
 
-        return (Result) await _feedbackService.SendErrorAsync(
+        return (Result)await feedbackService.SendErrorAsync(
             gatewayEvent.ChannelID,
             "Il est interdit d'envoyer des liens d'invitation vers d'autres serveurs Discord.",
             gatewayEvent.Author.ID,
             ct: ct);
     }
+
+    [GeneratedRegex(DISCORD_INVITE_REGEX, RegexOptions.IgnoreCase, "fr-FR")]
+    private static partial Regex MyRegex();
 }

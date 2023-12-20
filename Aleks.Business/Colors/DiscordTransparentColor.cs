@@ -1,15 +1,19 @@
-// Copyright (c) Alexis Chân Gridel. All Rights Reserved.
-// Licensed under the GNU General Public License v3.0.
-// See the LICENSE file in the project root for more information.
-
 using System.Drawing;
 
 namespace Aleks.Business.Colors;
 
+/// <summary>
+///     The default colors used throughout the application.
+/// </summary>
 public struct DiscordTransparentColor
 {
-    //2F3136
+    /// <summary>
+    ///     The default color used for the background.
+    /// </summary>
     public static Color Value => Color.FromArgb(47, 49, 54);
 
+    /// <summary>
+    ///     The default color used for the logo.
+    /// </summary>
     public static Color LogoColor => Color.FromArgb(126, 179, 141);
 }

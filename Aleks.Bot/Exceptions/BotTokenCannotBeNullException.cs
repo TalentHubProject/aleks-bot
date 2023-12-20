@@ -1,13 +1,9 @@
-﻿// Copyright (c) Alexis Chân Gridel. All Rights Reserved.
-// Licensed under the GNU General Public License v3.0.
-// See the LICENSE file in the project root for more information.
-
-using System.Runtime.Serialization;
+﻿using System.Runtime.Serialization;
 
 namespace Aleks.Bot.Exceptions;
 
 /// <summary>
-///    The exception that is thrown when the bot token is null.
+///     The exception that is thrown when the bot token is null.
 /// </summary>
 [Serializable]
 public class BotTokenCannotBeNullException

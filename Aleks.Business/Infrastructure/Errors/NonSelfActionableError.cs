@@ -4,7 +4,7 @@
 
 using Remora.Results;
 
-namespace Aleks.Bot.Infrastructure.Errors;
+namespace Aleks.Business.Infrastructure.Errors;
 
 public sealed record NonSelfActionableError(string Message)
     : ResultError(Message);

@@ -4,7 +4,11 @@
 
 using Remora.Results;
 
-namespace Aleks.Bot.Infrastructure.Errors;
+namespace Aleks.Business.Infrastructure.Errors;
 
+/// <summary>
+///   The error to use when the user is a bot.
+/// </summary>
+/// <param name="Message"></param>
 public sealed record NoBotError(string Message)
     : ResultError(Message);

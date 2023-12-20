@@ -1,17 +1,15 @@
-// Copyright (c) Alexis Chân Gridel. All Rights Reserved.
-// Licensed under the GNU General Public License v3.0.
-// See the LICENSE file in the project root for more information.
-
 using Aleks.Business.Infrastructure.Attributes;
+using Aleks.Business.Infrastructure.Errors;
 using Remora.Commands.Conditions;
 using Remora.Discord.API.Abstractions.Objects;
-using Remora.Discord.API.Abstractions.Rest;
 using Remora.Discord.Commands.Contexts;
 using Remora.Results;
-using Aleks.Bot.Infrastructure.Errors;
 
-namespace Aleks.Business.Attributes;
+namespace Aleks.Business.Infrastructure.Conditions;
 
+/// <summary>
+///     The condition to check if the user is not itself.
+/// </summary>
 public class NonSelfActionableCondition
     : ICondition<NonSelfActionableAttribute, IUser>
 {
@@ -26,7 +24,8 @@ public class NonSelfActionableCondition
     // https://github.com/VelvetThePanda 
     // This code belongs to Velvet, I just adapted it to my needs.
     // It comes from the Velvet's Discord Bot Silk project.
-    public async ValueTask<Result> CheckAsync(NonSelfActionableAttribute attribute, IUser data, CancellationToken ct = default)
+    public async ValueTask<Result> CheckAsync(NonSelfActionableAttribute attribute, IUser data,
+        CancellationToken ct = default)
     {
         var user = _commandContext switch
         {

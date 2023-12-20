@@ -1,15 +1,18 @@
-﻿// Copyright (c) Alexis Chân Gridel. All Rights Reserved.
-// Licensed under the GNU General Public License v3.0.
-// See the LICENSE file in the project root for more information.
-
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Remora.Discord.Gateway.Extensions;
-using Aleks.Bot.Responders.AnyResponderLogging;
 
 namespace Aleks.Bot.Responders.AnyResponderLogging;
 
+/// <summary>
+///     Setup for the AnyEventResponder.
+/// </summary>
 public static class Setup
 {
+    /// <summary>
+    ///     Adds the AnyEventResponder to the service collection.
+    /// </summary>
+    /// <param name="services">The service collection.</param>
+    /// <returns>The service collection builder.</returns>
     public static IServiceCollection AddAnyEventResponderLogging(this IServiceCollection services)
     {
         return services

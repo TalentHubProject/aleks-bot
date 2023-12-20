@@ -1,7 +1,3 @@
-// Copyright (c) Alexis Chân Gridel. All Rights Reserved.
-// Licensed under the GNU General Public License v3.0.
-// See the LICENSE file in the project root for more information.
-
 using System.ComponentModel;
 using Remora.Commands.Attributes;
 using Remora.Commands.Groups;
@@ -14,16 +10,8 @@ namespace Aleks.Bot.CommandGroups;
 /// <summary>
 ///     A command group for the credit command.
 /// </summary>
-public class CreditCommandGroup
-    : CommandGroup
+public class CreditCommandGroup(FeedbackService feedbackService) : CommandGroup
 {
-    private readonly FeedbackService _feedbackService;
-
-    public CreditCommandGroup(FeedbackService feedbackService)
-    {
-        _feedbackService = feedbackService;
-    }
-
     /// <summary>
     ///     Shows all the contributors to the bot.
     /// </summary>
@@ -32,14 +20,13 @@ public class CreditCommandGroup
     [Description("Shows all the contributors to the bot.")]
     public async Task<Result> CreditCommandAync()
     {
-        return (Result) await _feedbackService.SendContextualEmbedAsync(
+        return (Result)await feedbackService.SendContextualEmbedAsync(
             new Embed
             {
                 Title = "Credits Test",
                 Description = "This bot was made by Alexis Chân Gridel. " +
-                              "It is licensed under the GNU General Public License v3.0. "
+                              "It is licensed under the GNU General Public License v3.0. ",
             },
-            ct: CancellationToken
-        );
+            ct: CancellationToken);
     }
 }

@@ -1,8 +1,5 @@
-﻿// Copyright (c) Alexis Chân Gridel. All Rights Reserved.
-// Licensed under the GNU General Public License v3.0.
-// See the LICENSE file in the project root for more information.
-
-using System.ComponentModel;
+﻿using System.ComponentModel;
+using Aleks.Business.Colors;
 using Remora.Commands.Attributes;
 using Remora.Commands.Groups;
 using Remora.Discord.API;
@@ -13,30 +10,18 @@ using Remora.Discord.Commands.Conditions;
 using Remora.Discord.Commands.Contexts;
 using Remora.Discord.Commands.Extensions;
 using Remora.Results;
-using Aleks.Business.Colors;
 
 namespace Aleks.Bot.CommandGroups;
 
 /// <summary>
 ///     A command group for the informational message creator command.
 /// </summary>
-public class InformationalMessageCreatorCommandGroup
+public class InformationalMessageCreatorCommandGroup(
+    ICommandContext commandContext,
+    IDiscordRestGuildAPI discordRestGuildApi,
+    IDiscordRestChannelAPI discordRestChannelApi)
     : CommandGroup
 {
-    private readonly ICommandContext _commandContext;
-    private readonly IDiscordRestChannelAPI _discordRestChannelApi;
-    private readonly IDiscordRestGuildAPI _discordRestGuildApi;
-
-    public InformationalMessageCreatorCommandGroup(
-        ICommandContext commandContext,
-        IDiscordRestGuildAPI discordRestGuildApi,
-        IDiscordRestChannelAPI discordRestChannelApi)
-    {
-        _commandContext = commandContext;
-        _discordRestGuildApi = discordRestGuildApi;
-        _discordRestChannelApi = discordRestChannelApi;
-    }
-
     /// <summary>
     ///     Creates an informational message.
     /// </summary>
@@ -51,22 +36,21 @@ public class InformationalMessageCreatorCommandGroup
         string title,
         string message)
     {
-        if (!_commandContext.TryGetGuildID(out var guildId))
+        if (!commandContext.TryGetGuildID(out var guildId))
         {
             throw new InvalidOperationException("Could not get guild ID.");
         }
 
-        if (!_commandContext.TryGetChannelID(out var channelId))
+        if (!commandContext.TryGetChannelID(out var channelId))
         {
             throw new InvalidOperationException("Could not get channel ID.");
         }
 
-        var guild = await _discordRestGuildApi.GetGuildAsync(guildId.Value, ct: CancellationToken);
-        var guildIconUri = CDN.GetGuildIconUrl(guild.Entity);
+        var guild = await discordRestGuildApi.GetGuildAsync(guildId.Value, ct: CancellationToken);
 
         message = message.Replace("|", "\n");
 
-        await _discordRestChannelApi.CreateMessageAsync(
+        await discordRestChannelApi.CreateMessageAsync(
             channelId.Value,
             embeds: new[]
             {
@@ -74,8 +58,8 @@ public class InformationalMessageCreatorCommandGroup
                 {
                     Title = title,
                     Description = message,
-                    Colour = DiscordTransparentColor.LogoColor
-                }
+                    Colour = DiscordTransparentColor.LogoColor,
+                },
             },
             ct: CancellationToken);
 
