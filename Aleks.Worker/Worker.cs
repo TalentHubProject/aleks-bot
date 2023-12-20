@@ -39,8 +39,8 @@ public class Worker
 
     private async Task InitializeSlashCommands(CancellationToken stoppingToken)
     {
-        var guildId = _configuration["Discord:GUILD_ID_"]
-                      ?? throw new ArgumentNullException("Discord:GUILD_ID_");
+        var guildId = _configuration["GuildId"]
+                      ?? throw new ArgumentNullException("GuildId is not configured.");
 
         var guildIdParsed = ulong.Parse(guildId);
         
