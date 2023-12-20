@@ -1,66 +1,46 @@
-// Copyright (c) Alexis Chân Gridel. All Rights Reserved.
-// Licensed under the GNU General Public License v3.0.
-// See the LICENSE file in the project root for more information.
-
 using System.Text.Json;
 using Remora.Discord.Commands.Services;
-using Remora.Discord.Gateway;
 using Remora.Rest.Core;
 
 namespace Aleks.Worker;
 
-public class Worker
+public class Worker(
+    ILogger<Worker> logger,
+    SlashService slashService,
+    IConfiguration configuration)
     : BackgroundService
 {
-    private readonly IConfiguration _configuration;
-    private readonly DiscordGatewayClient _gatewayClient;
-    private readonly ILogger<Worker> _logger;
-    private readonly SlashService _slashService;
-
-    public Worker(
-        ILogger<Worker> logger,
-        DiscordGatewayClient gatewayClient,
-        SlashService slashService,
-        IConfiguration configuration)
-    {
-        _logger = logger;
-        _gatewayClient = gatewayClient;
-        _slashService = slashService;
-        _configuration = configuration;
-    }
-
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        await InitializeSlashCommands(stoppingToken);
+        logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
 
-        var result = await _gatewayClient.RunAsync(stoppingToken);
-        if (!result.IsSuccess) _logger.LogError(result.Error.Message);
+        await InitializeSlashCommands(stoppingToken);
     }
 
     private async Task InitializeSlashCommands(CancellationToken stoppingToken)
     {
-        var guildId = _configuration["GuildId"]
+        var guildId = configuration["GuildId"]
                       ?? throw new ArgumentNullException("GuildId is not configured.");
 
         var guildIdParsed = ulong.Parse(guildId);
-        
-        _logger.LogInformation("Guild ID: {GuildId}", guildIdParsed);
 
-        var development = _configuration["DOTNET_ENVIRONMENT"] == "Development";
+        logger.LogInformation("Guild ID: {GuildId}", guildIdParsed);
 
-        _logger.LogInformation("Your bot is running in {Environment} mode.", development
+        var development = configuration["DOTNET_ENVIRONMENT"] == "Development";
+
+        logger.LogInformation("Your bot is running in {Environment} mode.", development
             ? "Development"
             : "Production");
 
         var updateSlash = development switch
         {
-            true => await _slashService.UpdateSlashCommandsAsync(new Snowflake(guildIdParsed), ct: stoppingToken),
-            false => await _slashService.UpdateSlashCommandsAsync(ct: stoppingToken)
+            true => await slashService.UpdateSlashCommandsAsync(new Snowflake(guildIdParsed), ct: stoppingToken),
+            false => await slashService.UpdateSlashCommandsAsync(ct: stoppingToken)
         };
 
         if (!updateSlash.IsSuccess)
         {
-            _logger.LogWarning("Failed to update slash commands: {Error}", JsonSerializer.Serialize(updateSlash));
+            logger.LogWarning("Failed to update slash commands: {Error}", JsonSerializer.Serialize(updateSlash));
         }
     }
 }
