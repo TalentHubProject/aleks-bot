@@ -27,7 +27,7 @@ public class StaticWelcomerResponder(
         var embed = new Embed
         {
             Colour = DiscordTransparentColor.Value,
-            Description = $"{gatewayEvent.User.Value.ID.ToMention()} vient de rejoindre le serveur !",
+            Description = $"{gatewayEvent.User.Value.ID.ToMention()} vient de rejoindre le serveur ! Bienvenue :)",
         };
 
         var channelIdSnowflake = Snowflake.TryParse(channelId, out var snowflake)
