@@ -38,15 +38,17 @@ public class InformationalMessageCreatorCommandGroup(
     {
         if (!commandContext.TryGetGuildID(out var guildId))
         {
-            throw new InvalidOperationException("Could not get guild ID.");
+            return Result.FromError(new InvalidOperationError("Could not get guild ID."));
         }
 
         if (!commandContext.TryGetChannelID(out var channelId))
         {
-            throw new InvalidOperationException("Could not get channel ID.");
+            return Result.FromError(new InvalidOperationError("Could not get channel ID."));
         }
 
         var guild = await discordRestGuildApi.GetGuildAsync(guildId.Value, ct: CancellationToken);
+
+        var guildIcon = CDN.GetGuildIconUrl(guildId.Value, guild.Entity.Icon);
 
         message = message.Replace("|", "\n");
 
@@ -58,6 +60,9 @@ public class InformationalMessageCreatorCommandGroup(
                 {
                     Title = title,
                     Description = message,
+                    Thumbnail = guildIcon.IsSuccess
+                        ? new EmbedThumbnail(guildIcon.Entity.ToString())
+                        : null,
                     Colour = DiscordTransparentColor.LogoColor,
                 },
             },
