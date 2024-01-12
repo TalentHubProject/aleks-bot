@@ -26,9 +26,6 @@
     </ItemGroup>
 
     <ItemGroup>
-        <Folder Include="AutoRoles\Handlers\Queries"/>
-        <Folder Include="AutoRoles\Queries"/>
-        <Folder Include="AutoRoles\Responders"/>
         <Folder Include="Permission\Responders"/>
     </ItemGroup>
 
