@@ -25,7 +25,7 @@ public class CreditCommandGroup(FeedbackService feedbackService) : CommandGroup
             {
                 Title = "Credits Test",
                 Description = "This bot was made by Alexis Chân Gridel. \n" +
-                              "It is licensed under the GNU General Public License v3.0. \n" +
+                              "It is licensed under the [GNU General Public License v3.0](https://github.com/TalentHubProject/aleks-bot/blob/main/LICENSE). \n" +
                               "All bot's illustrations were made by Skies (aka_skies) \n" +
                               "The bot's is only intended for the use of the server [Talent Hub](https://discord.talent-hub.fr).",
             },
