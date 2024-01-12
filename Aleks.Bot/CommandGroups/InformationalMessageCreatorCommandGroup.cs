@@ -9,6 +9,7 @@ using Remora.Discord.API.Objects;
 using Remora.Discord.Commands.Conditions;
 using Remora.Discord.Commands.Contexts;
 using Remora.Discord.Commands.Extensions;
+using Remora.Discord.Commands.Feedback.Services;
 using Remora.Results;
 
 namespace Aleks.Bot.CommandGroups;
@@ -17,6 +18,7 @@ namespace Aleks.Bot.CommandGroups;
 ///     A command group for the informational message creator command.
 /// </summary>
 public class InformationalMessageCreatorCommandGroup(
+    FeedbackService feedbackService,
     ICommandContext commandContext,
     IDiscordRestGuildAPI discordRestGuildApi,
     IDiscordRestChannelAPI discordRestChannelApi)
@@ -52,22 +54,16 @@ public class InformationalMessageCreatorCommandGroup(
 
         message = message.Replace("|", "\n");
 
-        await discordRestChannelApi.CreateMessageAsync(
-            channelId.Value,
-            embeds: new[]
+        return (Result)await feedbackService.SendContextualEmbedAsync(
+            new Embed
             {
-                new Embed
-                {
-                    Title = title,
-                    Description = message,
-                    Thumbnail = guildIcon.IsSuccess
-                        ? new EmbedThumbnail(guildIcon.Entity.ToString())
-                        : null,
-                    Colour = DiscordTransparentColor.LogoColor,
-                },
+                Title = title,
+                Description = message,
+                Thumbnail = guildIcon.IsSuccess
+                    ? new EmbedThumbnail(guildIcon.Entity.ToString())
+                    : null,
+                Colour = DiscordTransparentColor.LogoColor,
             },
             ct: CancellationToken);
-
-        return Result.FromSuccess();
     }
 }
