@@ -24,9 +24,9 @@ public class CreditCommandGroup(FeedbackService feedbackService) : CommandGroup
             new Embed
             {
                 Title = "Credits Test",
-                Description = "This bot was made by Alexis Chân Gridel. " +
-                              "It is licensed under the GNU General Public License v3.0. " +
-                              "All bot's illustrations were made by Skies (aka_skies)" +
+                Description = "This bot was made by Alexis Chân Gridel. \n" +
+                              "It is licensed under the GNU General Public License v3.0. \n" +
+                              "All bot's illustrations were made by Skies (aka_skies) \n" +
                               "The bot's is only intended for the use of the server [Talent Hub](https://discord.talent-hub.fr).",
             },
             ct: CancellationToken);
