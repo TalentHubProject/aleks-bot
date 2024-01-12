@@ -25,6 +25,11 @@ public class StaticStarboardOnEnoughStarsGotResponder(
     /// <inheritdoc />
     public async Task<Result> RespondAsync(IMessageReactionAdd gatewayEvent, CancellationToken ct = default)
     {
+        logger.LogInformation(
+            "Message {MessageId} in channel {ChannelId} got a reaction.",
+            gatewayEvent.MessageID,
+            gatewayEvent.ChannelID);
+
         if (!gatewayEvent.Emoji.Name.Equals(StaticStarboardDiscordService.StarEmoji))
         {
             logger.LogInformation(
@@ -45,30 +50,21 @@ public class StaticStarboardOnEnoughStarsGotResponder(
 
         if (!await staticStarboardService.HasEnoughStars(gatewayEvent.MessageID, gatewayEvent.ChannelID))
         {
-            var message = await channelApi.GetChannelMessageAsync(gatewayEvent.ChannelID, gatewayEvent.MessageID, ct);
-
-            if (!message.IsSuccess)
-            {
-                return Result.FromError(message.Error);
-            }
-
-            var reactions = message.Entity.Reactions;
-
-            if (!reactions.HasValue)
-            {
-                return Result.FromSuccess();
-            }
+            logger.LogInformation(
+                "Message {MessageId} in channel {ChannelId} does not have enough stars.",
+                gatewayEvent.MessageID,
+                gatewayEvent.ChannelID);
 
             return Result.FromSuccess();
         }
 
         if (!ulong.TryParse(configuration["StarboardChannelId"], out var starboardChannelId))
         {
+            logger.LogError("StarboardChannelId configuration is missing or invalid.");
+
             return Result.FromError(
                 new InvalidOperationError("StarboardChannelId configuration is missing or invalid."));
         }
-
-        var starboardChannelIdSnowflake = new Snowflake(starboardChannelId);
 
         var originalMessageResult =
             await channelApi.GetChannelMessageAsync(gatewayEvent.ChannelID, gatewayEvent.MessageID, ct);
@@ -76,11 +72,17 @@ public class StaticStarboardOnEnoughStarsGotResponder(
         if (!originalMessageResult.IsSuccess)
         {
             logger.LogError("Failed to retrieve the original message.");
+
             return Result.FromError(originalMessageResult.Error);
         }
 
         if (originalMessageResult.Entity.Attachments.Count == 0)
         {
+            logger.LogInformation(
+                "Message {MessageId} in channel {ChannelId} does not have any attachments.",
+                gatewayEvent.MessageID,
+                gatewayEvent.ChannelID);
+
             return Result.FromSuccess();
         }
 
@@ -89,7 +91,9 @@ public class StaticStarboardOnEnoughStarsGotResponder(
 
         if (!avatarUrl.IsSuccess)
         {
-            throw new InvalidOperationException("Failed to get the avatar URL.");
+            logger.LogError("Failed to retrieve the avatar URL.");
+
+            return Result.FromError(avatarUrl.Error);
         }
 
         var embed = new Embed
@@ -97,7 +101,7 @@ public class StaticStarboardOnEnoughStarsGotResponder(
             Author = new EmbedAuthor(originalMessage.Author.Username, IconUrl: avatarUrl.Entity.ToString()),
             Description = $"[Voir la création](" +
                           $"https://discord.com/channels/{gatewayEvent.GuildID}/{gatewayEvent.ChannelID}/{gatewayEvent.MessageID})",
-            Image = new EmbedImage(originalMessage.Attachments.FirstOrDefault()?.Url ?? ""),
+            Image = new EmbedImage(originalMessage.Attachments.FirstOrDefault()?.Url ?? string.Empty),
             Colour = DiscordTransparentColor.Value,
         };
 

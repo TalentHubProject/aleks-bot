@@ -17,6 +17,12 @@ public class StaticStarboardDiscordService(
     public IReadOnlySet<Snowflake> StarboardSupportedChannels { get; } = new HashSet<Snowflake>
     {
         new(1069912260643934219),
+
+        // Preview (#création - Zone de Test)
+        new(1195408137608495245),
+
+        // Preview (#photographie - Zone de Test)
+        new(1195408308304105512),
     };
 
     /// <inheritdoc />
