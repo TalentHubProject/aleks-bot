@@ -86,6 +86,34 @@ public class StaticStarboardOnEnoughStarsGotResponder(
             return Result.FromSuccess();
         }
 
+        // fetch messages in the starboard channel to see if the message is already there if so, don't repost it
+        var starboardChannelMessages = await channelApi.GetChannelMessagesAsync(
+            new Snowflake(starboardChannelId),
+            limit: 100,
+            ct: ct);
+
+        if (!starboardChannelMessages.IsSuccess)
+        {
+            logger.LogError("Failed to retrieve the starboard channel messages.");
+
+            return Result.FromError(starboardChannelMessages.Error);
+        }
+
+        var starboardChannelMessage = starboardChannelMessages.Entity.FirstOrDefault(x =>
+            x.Embeds.Any(y =>
+                y.Description.Value.Contains(
+                    $"https://discord.com/channels/{gatewayEvent.GuildID}/{gatewayEvent.ChannelID}/{gatewayEvent.MessageID}")));
+
+        if (starboardChannelMessage != null)
+        {
+            logger.LogInformation(
+                "Message {MessageId} in channel {ChannelId} is already in the starboard channel.",
+                gatewayEvent.MessageID,
+                gatewayEvent.ChannelID);
+
+            return Result.FromSuccess();
+        }
+
         var originalMessage = originalMessageResult.Entity;
         var avatarUrl = CDN.GetUserAvatarUrl(originalMessage.Author);
 
