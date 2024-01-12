@@ -43,3 +43,4 @@ msbuild.wrn
 
 # Docker Compose mysql data
 mysql/
+data/
