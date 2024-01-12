@@ -28,14 +28,14 @@ public class Worker(
 
         var development = configuration["DOTNET_ENVIRONMENT"] == "Development";
 
-        logger.LogInformation("Your bot is running in {Environment} mode.", development
-            ? "Development"
-            : "Production");
+        logger.LogInformation(
+            "Your bot is running in {Environment} mode.",
+            development ? "Development" : "Production");
 
         var updateSlash = development switch
         {
             true => await slashService.UpdateSlashCommandsAsync(new Snowflake(guildIdParsed), ct: stoppingToken),
-            false => await slashService.UpdateSlashCommandsAsync(ct: stoppingToken)
+            false => await slashService.UpdateSlashCommandsAsync(ct: stoppingToken),
         };
 
         if (!updateSlash.IsSuccess)

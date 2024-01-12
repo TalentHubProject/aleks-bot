@@ -30,10 +30,6 @@ var host = Host.CreateDefaultBuilder(args)
             .AddDiscordCaching()
             ;
     })
-    .ConfigureLogging(
-        c => c
-            .AddConsole()
-            .AddFilter("System.Net.Http.HttpClient.*", LogLevel.Warning))
     .Build();
 
 await host.RunAsync();
