@@ -29,7 +29,6 @@
         <ProjectReference Include="..\Aleks.Bot\Aleks.Bot.csproj" />
         <ProjectReference Include="..\Aleks.Data\Aleks.Data.csproj" />
         <ProjectReference Include="..\Aleks.Bot\Aleks.Bot.csproj" />
-        <ProjectReference Include="..\Aleks.ServiceDefaults\Aleks.ServiceDefaults.csproj" />
     </ItemGroup>
 
     <ItemGroup>
