@@ -4,4 +4,5 @@ package org.talenthub.tools;
 public class Utils {
 
     public static final String MISSING_PERMISSION = "Désolé, vous n'avez pas la permission de faire cela.";
+
 }
