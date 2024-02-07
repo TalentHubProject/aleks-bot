@@ -21,7 +21,7 @@ public class PlayerJoinGuildListener extends ListenerAdapter {
         String welcomeChannelId = configService.getString("welcome-channel-id");
 
         TextChannel welcomeChannel;
-        if(welcomeChannelId != null){
+        if(!welcomeChannelId.isEmpty()){
             // Get the welcome channel in the config
             welcomeChannel = event.getGuild().getTextChannelById(configService.getString("welcome-channel-id"));
 
@@ -34,7 +34,7 @@ public class PlayerJoinGuildListener extends ListenerAdapter {
 
         // Send the welcome message
         welcomeChannel.sendMessage("""
-                *%s, vient de rejoindre le serveur ! Répondez à ce message pour lui souhaiter la bienvenue et gagner de l'expérience.*
+                *%s, vient de rejoindre le serveur ! Répondez à ce message pour lui souhaiter la bienvenue et gagner de l'expérience.* ✨
                 Bienvenue sur %s, %s ! ? Empowering Creators, Uniting Passions, Inspriring Growth ? ; construisons ensemble des projets ambitieux, main dans la main.
                 """
                 .formatted(
