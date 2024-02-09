@@ -2,6 +2,7 @@ package org.talenthub.service;
 
 import lombok.AllArgsConstructor;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
@@ -29,4 +30,5 @@ public class MessageBroadcasterService {
     public void broadcastMessageEmbed(final TextChannel channel, final MessageEmbed embed){
         channel.sendMessageEmbeds(embed).queue();
     }
+
 }

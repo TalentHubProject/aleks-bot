@@ -6,6 +6,7 @@ import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
 import org.springframework.stereotype.Service;
 import org.talenthub.module.xp.persistence.Level;
 import org.talenthub.module.xp.repository.LevelRepository;
+import org.talenthub.module.xp.task.ActivityCalculTask;
 import org.talenthub.persistence.DiscordUser;
 import org.talenthub.service.ConfigService;
 import org.talenthub.service.DiscordUserService;
@@ -24,7 +25,9 @@ public class LevelService {
 
         DiscordUser discordUser = discordUserService.getDiscordUser(member.getIdLong());
 
-        discordUser.setXp(discordUser.getXp() + xp);
+        long xpToAdd = ActivityCalculTask.getInstance().isBoostActivated() ? xp * 2 : xp;
+
+        discordUser.setXp(discordUser.getXp() + xpToAdd);
 
         if(discordUser.getLevel().getMaxXp() <= discordUser.getXp()){
 

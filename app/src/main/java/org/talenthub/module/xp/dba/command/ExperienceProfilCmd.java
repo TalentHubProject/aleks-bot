@@ -5,7 +5,7 @@ import fr.leonarddoo.dba.element.DBACommand;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import org.springframework.stereotype.Component;
 
-@Command(name = "experience_profil", description = "Command to get the experience profil of a user")
+@Command(name = "experience-profil", description = "Command to get the experience profil of a user")
 @Component
 public class ExperienceProfilCmd implements DBACommand {
 
@@ -13,4 +13,6 @@ public class ExperienceProfilCmd implements DBACommand {
     public void execute(final SlashCommandInteractionEvent event) {
         //TODO
     }
+
+
 }
