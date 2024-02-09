@@ -1,4 +1,4 @@
-package org.talenthub.module.xp.infrastructure.persistence;
+package org.talenthub.module.xp.persistence;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

@@ -1,4 +1,4 @@
-package org.talenthub.module.xp.infrastructure.dba.command;
+package org.talenthub.module.xp.dba.command;
 
 import fr.leonarddoo.dba.annotation.Command;
 import fr.leonarddoo.dba.element.DBACommand;

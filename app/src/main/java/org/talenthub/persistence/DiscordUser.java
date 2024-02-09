@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.talenthub.module.xp.infrastructure.persistence.Level;
+import org.talenthub.module.xp.persistence.Level;
 
 @Entity
 @Table
@@ -16,7 +16,7 @@ public class DiscordUser {
     @Id
     private long id;
 
-    @OneToOne
+    @ManyToOne
     private Level level;
 
     @Column

@@ -1,12 +1,11 @@
-package org.talenthub.module.xp.infrastructure.service;
+package org.talenthub.module.xp.service;
 
 import lombok.AllArgsConstructor;
 import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
 import org.springframework.stereotype.Service;
-import org.talenthub.module.xp.infrastructure.persistence.Level;
-import org.talenthub.module.xp.infrastructure.repository.LevelRepository;
+import org.talenthub.module.xp.persistence.Level;
+import org.talenthub.module.xp.repository.LevelRepository;
 import org.talenthub.persistence.DiscordUser;
 import org.talenthub.service.ConfigService;
 import org.talenthub.service.DiscordUserService;

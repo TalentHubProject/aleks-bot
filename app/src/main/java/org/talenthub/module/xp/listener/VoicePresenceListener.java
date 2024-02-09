@@ -1,4 +1,4 @@
-package org.talenthub.module.xp.infrastructure.listener;
+package org.talenthub.module.xp.listener;
 
 import lombok.AllArgsConstructor;
 import net.dv8tion.jda.api.entities.channel.ChannelType;
@@ -7,7 +7,7 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
-import org.talenthub.module.xp.infrastructure.service.LevelService;
+import org.talenthub.module.xp.service.LevelService;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;

@@ -1,10 +1,12 @@
-package org.talenthub.module.welcome.infrastructure.listener;
+package org.talenthub.module.welcome.listener;
 
 import lombok.AllArgsConstructor;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.springframework.stereotype.Component;
+import org.talenthub.module.xp.model.WishWelcome;
+import org.talenthub.module.xp.task.WishWelcomeTask;
 import org.talenthub.service.ConfigService;
 
 import java.util.Objects;
@@ -42,7 +44,12 @@ public class PlayerJoinGuildListener extends ListenerAdapter {
                         event.getGuild().getName(),
                         event.getMember().getAsMention()
                 )
-        ).queue();
+        ).queue(welcomeMessage -> {
+            // Create WishWelcome
+            WishWelcome wishWelcome = new WishWelcome(welcomeMessage.getIdLong(), event.getMember().getIdLong());
+            // Execute the task
+            new WishWelcomeTask(welcomeMessage.getIdLong()).execute(wishWelcome);
+        });
 
 
 

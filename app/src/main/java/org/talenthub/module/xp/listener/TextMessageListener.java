@@ -1,11 +1,11 @@
-package org.talenthub.module.xp.infrastructure.listener;
+package org.talenthub.module.xp.listener;
 
 import lombok.AllArgsConstructor;
 import net.dv8tion.jda.api.entities.channel.ChannelType;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.springframework.stereotype.Component;
-import org.talenthub.module.xp.infrastructure.service.LevelService;
+import org.talenthub.module.xp.service.LevelService;
 
 @Component
 @AllArgsConstructor

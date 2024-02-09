@@ -2,8 +2,8 @@ package org.talenthub.service;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.talenthub.module.xp.infrastructure.persistence.Level;
-import org.talenthub.module.xp.infrastructure.repository.LevelRepository;
+import org.talenthub.module.xp.persistence.Level;
+import org.talenthub.module.xp.repository.LevelRepository;
 import org.talenthub.persistence.DiscordUser;
 import org.talenthub.repository.DiscordUserRepository;
 
