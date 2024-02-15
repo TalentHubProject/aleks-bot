@@ -1,31 +1,30 @@
-package org.talenthub.persistence;
+package org.talenthub.module.xp.persistence;
 
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.talenthub.module.xp.persistence.Level;
 
 @Entity
 @Table
-@Getter
-@Setter
 @NoArgsConstructor
-public class DiscordUser {
+@Getter
+public class PlayerLevel {
 
     @Id
-    private long id;
+    private long discordId;
 
     @ManyToOne
+    @Setter
     private Level level;
 
     @Column
+    @Setter
     private long xp;
 
-    public DiscordUser(final long id, final Level level){
-        this.id = id;
+    public PlayerLevel(long discordId, Level level){
+        this.discordId = discordId;
         this.level = level;
         this.xp = 0;
     }
-
 }

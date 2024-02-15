@@ -5,48 +5,47 @@ import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
 import org.springframework.stereotype.Service;
 import org.talenthub.module.xp.persistence.Level;
+import org.talenthub.module.xp.persistence.PlayerLevel;
 import org.talenthub.module.xp.repository.LevelRepository;
 import org.talenthub.module.xp.task.ActivityCalculTask;
-import org.talenthub.persistence.DiscordUser;
 import org.talenthub.service.ConfigService;
-import org.talenthub.service.DiscordUserService;
 import org.talenthub.service.MessageBroadcasterService;
 
 @Service
 @AllArgsConstructor
 public class LevelService {
 
-    private final DiscordUserService discordUserService;
+    private final PlayerLevelService playerLevelService;
     private final LevelRepository levelRepository;
     private final MessageBroadcasterService messageBroadcasterService;
     private final ConfigService configService;
 
     public void addXp(final GuildMessageChannel channel, final Member member, final long xp){
 
-        DiscordUser discordUser = discordUserService.getDiscordUser(member.getIdLong());
+        PlayerLevel playerLevel = playerLevelService.getPlayerLevel(member.getIdLong());
 
         long xpToAdd = ActivityCalculTask.getInstance().isBoostActivated() ? xp * 2 : xp;
 
-        discordUser.setXp(discordUser.getXp() + xpToAdd);
+        playerLevel.setXp(playerLevel.getXp() + xpToAdd);
 
-        if(discordUser.getLevel().getMaxXp() <= discordUser.getXp()){
+        if(playerLevel.getLevel().getMaxXp() <= playerLevel.getXp()){
 
-            Level newLevel = levelUp(discordUser);
+            Level newLevel = levelUp(playerLevel);
 
             messageBroadcasterService.broadcastBasicMessageEmbed(channel, "Félécitation **" + member.getEffectiveName() + "**! Tu as atteint le niveau " + newLevel.getId() + "!");
 
         }else{
-            discordUserService.updateDiscordUser(discordUser);
+            playerLevelService.updatePlayerLevel(playerLevel);
         }
 
     }
 
-    private Level levelUp(final DiscordUser discordUser){
+    private Level levelUp(final PlayerLevel playerLevel){
 
-        Level newlevel = levelRepository.findNextLevelByMaxXp(discordUser.getXp()).orElse(createNewlevel(discordUser.getLevel()));
-        discordUser.setLevel(newlevel);
+        Level newlevel = levelRepository.findNextLevelByMaxXp(playerLevel.getXp()).orElse(createNewlevel(playerLevel.getLevel()));
+        playerLevel.setLevel(newlevel);
 
-        discordUserService.updateDiscordUser(discordUser);
+        playerLevelService.updatePlayerLevel(playerLevel);
 
         return newlevel;
     }

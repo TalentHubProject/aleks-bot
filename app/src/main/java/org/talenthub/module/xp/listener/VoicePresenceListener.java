@@ -22,8 +22,6 @@ public class VoicePresenceListener extends ListenerAdapter {
 
     private final Map<Long, LocalDateTime> MEMBER_IN_VOICE = new HashMap<>();
 
-    private final Logger LOGGER = LoggerFactory.getLogger(VoicePresenceListener.class);
-
     @Override
     public void onGuildVoiceUpdate(final GuildVoiceUpdateEvent event) {
 

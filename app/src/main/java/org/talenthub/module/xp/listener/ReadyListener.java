@@ -30,7 +30,7 @@ public class ReadyListener extends ListenerAdapter {
     }
 
     @Override
-    public void onGuildReady(GuildReadyEvent event) {
+    public void onGuildReady(final GuildReadyEvent event) {
 
         ActivityCalculTask activityCalculTask = new ActivityCalculTaskFactory().create(event.getGuild());
 
