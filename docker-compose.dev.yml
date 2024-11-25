@@ -1,0 +1,11 @@
+services:
+  bot:
+    build: 
+      context: .
+      dockerfile: docker/development/Dockerfile
+    ports:
+      - "7654:8080"
+    volumes:
+      - ".:/app"
+    environment:
+      - "DISCORD_TOKEN=${BOT_TOKEN}"
