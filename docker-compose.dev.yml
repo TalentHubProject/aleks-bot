@@ -9,3 +9,4 @@ services:
       - ".:/app"
     environment:
       - "DISCORD_TOKEN=${BOT_TOKEN}"
+      - "GUILD_ID=${GUILD_ID:-939861494869426247}"
