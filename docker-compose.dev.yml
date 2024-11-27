@@ -1,12 +1,26 @@
 services:
   bot:
-    build: 
-      context: .
-      dockerfile: docker/development/Dockerfile
-    ports:
-      - "7654:8080"
+    build:
+      context: bot
+      dockerfile: Dockerfile
+    restart: always
+    networks:
+      - default
     volumes:
-      - ".:/app"
+      - ./bot:/app
+
+  postgres:
+    image: postgres
+    restart: always
     environment:
-      - "DISCORD_TOKEN=${BOT_TOKEN}"
-      - "GUILD_ID=${GUILD_ID:-939861494869426247}"
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      POSTGRES_DB: ${POSTGRES_DB:-postgres}
+    networks:
+      - default
+    volumes:
+      - ./data:/data
+
+networks:
+  default:
+    driver: bridge
